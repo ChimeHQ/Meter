@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if canImport(MetricKit)
 import MetricKit
+#endif
 
 public struct Frame: Codable {
     public var binaryUUID: UUID
@@ -32,5 +34,12 @@ public struct CallStackTree: Codable {
 
     static func from(data: Data) throws -> CallStackTree {
         return try JSONDecoder().decode(CallStackTree.self, from: data)
+    }
+
+    @available(iOS 14.0, *)
+    static func from(callStackTree: MXCallStackTree) throws -> CallStackTree {
+        let data = callStackTree.jsonRepresentation()
+
+        return try from(data: data)
     }
 }
