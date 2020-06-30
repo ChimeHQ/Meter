@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    name: Test on destination ${{ matrix.destination }}
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        destination: ["platform=macOS", "platform=iOS Simulator,name=iPhone 8"]
+    steps:
+      - uses: actions/checkout@v1
+      - name: install swiftlint
+        run: HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftlint
+      - name: update submodules
+        run: git submodule update --init
+      - name: xcodebuild test ${{ matrix.destination }}
+        run: set -o pipefail && xcodebuild test -scheme Meter -destination "${{ matrix.destination }}" | xcpretty
