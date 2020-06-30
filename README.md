@@ -27,6 +27,16 @@ dependencies: [
 github "ChimeHQ/Meter"
 ```
 
+### Expanded API
+
+As of beta 1 of iOS 14, the MetricKit API for crash reporting is very unwieldy. In particular, `MXCallStackTree` lacks any kind of interface for interacting with its structure. Meter includes some classes that make it much easier to work with.
+
+### MXMetricManager and Diagnostics Polyfill
+
+MetricKit's crash reporting facilities will require iOS 14, and isn't supported at all for tvOS, watchOS, or macOS. You may want to start moving towards using it as a standard interface between your app and whatever system consumes the data. Meter offers an API that's very similar to MetricKit's `MXMetricManager` to do just that.
+
+This makes it easier to support the full capabilities when available, and gracefully degrade when it is not. It will still be up to you to translate other sources of crash data. But, it can be reall desirable to have a uniform interface to whatever backend system you are using to consume the reports. And, as you move towards an iOS 14 minimum, and as (hopefully) Apple starts supporting MetricKit on more platforms, its easier to pull out the legacy code.
+
 ### Suggestions or Feedback
 
 We'd love to hear from you! Get in touch via [twitter](https://twitter.com/chimehq), an issue, or a pull request.
