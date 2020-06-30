@@ -36,10 +36,12 @@ public struct CallStackTree: Codable {
         return try JSONDecoder().decode(CallStackTree.self, from: data)
     }
 
+#if canImport(MetricKit)
     @available(iOS 14.0, *)
     static func from(callStackTree: MXCallStackTree) throws -> CallStackTree {
         let data = callStackTree.jsonRepresentation()
 
         return try from(data: data)
     }
+#endif
 }
