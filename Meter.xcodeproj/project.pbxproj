@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C95B96BD24AB765B001511B8 /* MeterPayloadProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B96BC24AB765B001511B8 /* MeterPayloadProvider.swift */; };
+		C95B96BF24AB7BDC001511B8 /* PayloadProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B96BE24AB7BDC001511B8 /* PayloadProviderTests.swift */; };
 		C99A164224AB52F300C52573 /* Meter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C99A163824AB52F300C52573 /* Meter.framework */; };
 		C99A164924AB52F300C52573 /* Meter.h in Headers */ = {isa = PBXBuildFile; fileRef = C99A163B24AB52F300C52573 /* Meter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C99A165324AB531E00C52573 /* CallStackTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99A165224AB531E00C52573 /* CallStackTree.swift */; };
@@ -24,6 +26,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C95B96BC24AB765B001511B8 /* MeterPayloadProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeterPayloadProvider.swift; sourceTree = "<group>"; };
+		C95B96BE24AB7BDC001511B8 /* PayloadProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayloadProviderTests.swift; sourceTree = "<group>"; };
 		C998F71A24AB55A60027E448 /* Meter.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Meter.xcconfig; sourceTree = "<group>"; };
 		C998F71B24AB5A490027E448 /* MeterTests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = MeterTests.xcconfig; sourceTree = "<group>"; };
 		C99A163824AB52F300C52573 /* Meter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Meter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +83,7 @@
 				C99A163C24AB52F300C52573 /* Info.plist */,
 				C99A165224AB531E00C52573 /* CallStackTree.swift */,
 				C998F71A24AB55A60027E448 /* Meter.xcconfig */,
+				C95B96BC24AB765B001511B8 /* MeterPayloadProvider.swift */,
 			);
 			path = Meter;
 			sourceTree = "<group>";
@@ -89,6 +94,7 @@
 				C99A164824AB52F300C52573 /* Info.plist */,
 				C99A165424AB533500C52573 /* CallStackTreeTests.swift */,
 				C998F71B24AB5A490027E448 /* MeterTests.xcconfig */,
+				C95B96BE24AB7BDC001511B8 /* PayloadProviderTests.swift */,
 			);
 			path = MeterTests;
 			sourceTree = "<group>";
@@ -203,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C99A165324AB531E00C52573 /* CallStackTree.swift in Sources */,
+				C95B96BD24AB765B001511B8 /* MeterPayloadProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,6 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C99A165524AB533500C52573 /* CallStackTreeTests.swift in Sources */,
+				C95B96BF24AB7BDC001511B8 /* PayloadProviderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

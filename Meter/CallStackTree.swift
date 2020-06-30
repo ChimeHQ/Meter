@@ -16,6 +16,17 @@ public struct Frame: Codable {
     public var sampleCount: Int
     public var binaryName: String
     public var address: Int
+
+    public init(binaryUUID: UUID, offsetIntoBinaryTextSegment: Int, sampleCount: Int, binaryName: String, address: Int) {
+        self.binaryUUID = binaryUUID
+        self.offsetIntoBinaryTextSegment = offsetIntoBinaryTextSegment
+        self.sampleCount = sampleCount
+        self.binaryName = binaryName
+        self.address = address
+    }
+}
+
+extension Frame: Hashable {
 }
 
 public struct CallStack: Codable {
@@ -26,6 +37,14 @@ public struct CallStack: Codable {
         case threadAttributed
         case rootFrames = "callStackRootFrames"
     }
+
+    public init(threadAttributed: Bool, rootFrames: [Frame]) {
+        self.threadAttributed = threadAttributed
+        self.rootFrames = rootFrames
+    }
+}
+
+extension CallStack: Hashable {
 }
 
 public struct CallStackTree: Codable {
@@ -48,4 +67,20 @@ public struct CallStackTree: Codable {
 //        return try from(data: data)
 //    }
 //#endif
+
+    public init(callStacks: [CallStack], callStackPerThread: Bool) {
+        self.callStacks = callStacks
+        self.callStackPerThread = callStackPerThread
+    }
+
+    // I'd really prefer to have this function match the MetricKit
+    // signature, but JSON encoding can fail, and I'd prefer not
+    // to make that failure silent.
+    public func JSONRepresentation() throws -> Data {
+        return try JSONEncoder().encode(self)
+    }
 }
+
+extension CallStackTree: Hashable {
+}
+

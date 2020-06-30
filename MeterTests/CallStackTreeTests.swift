@@ -48,6 +48,5 @@ class CallStackTreeTests: XCTestCase {
         XCTAssertEqual(frame.sampleCount, 20)
         XCTAssertEqual(frame.binaryName, "testBinaryName")
         XCTAssertEqual(frame.address, 74565)
-
     }
 }
