@@ -25,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		C998F71A24AB55A60027E448 /* Meter.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Meter.xcconfig; sourceTree = "<group>"; };
+		C998F71B24AB5A490027E448 /* MeterTests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = MeterTests.xcconfig; sourceTree = "<group>"; };
 		C99A163824AB52F300C52573 /* Meter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Meter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99A163B24AB52F300C52573 /* Meter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Meter.h; sourceTree = "<group>"; };
 		C99A163C24AB52F300C52573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -87,6 +88,7 @@
 			children = (
 				C99A164824AB52F300C52573 /* Info.plist */,
 				C99A165424AB533500C52573 /* CallStackTreeTests.swift */,
+				C998F71B24AB5A490027E448 /* MeterTests.xcconfig */,
 			);
 			path = MeterTests;
 			sourceTree = "<group>";
@@ -377,16 +379,12 @@
 		};
 		C99A165024AB52F300C52573 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C998F71B24AB5A490027E448 /* MeterTests.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MeterTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chimehq.MeterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -395,16 +393,12 @@
 		};
 		C99A165124AB52F300C52573 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C998F71B24AB5A490027E448 /* MeterTests.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MeterTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chimehq.MeterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
