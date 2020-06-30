@@ -10,4 +10,4 @@
 
 #include "xcconfigs/UniversalFramework_Test.xcconfig"
 
-SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos appletvos
+SUPPORTED_PLATFORMS = macosx iphonesimulator iphoneos appletvos appletvsimulator
