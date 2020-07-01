@@ -16,13 +16,19 @@ public struct Frame: Codable {
     public var sampleCount: Int
     public var binaryName: String
     public var address: Int
+    public var subFrames: [Frame]?
 
-    public init(binaryUUID: UUID, offsetIntoBinaryTextSegment: Int, sampleCount: Int, binaryName: String, address: Int) {
+    public init(binaryUUID: UUID, offsetIntoBinaryTextSegment: Int, sampleCount: Int, binaryName: String, address: Int, subFrames: [Frame]) {
         self.binaryUUID = binaryUUID
         self.offsetIntoBinaryTextSegment = offsetIntoBinaryTextSegment
         self.sampleCount = sampleCount
         self.binaryName = binaryName
         self.address = address
+        self.subFrames = subFrames
+    }
+
+    public var flattenedFrames: [Frame] {
+        return subFrames?.flatMap({ [$0] + $0.flattenedFrames }) ?? []
     }
 }
 
@@ -30,6 +36,7 @@ extension Frame: Hashable {
 }
 
 public struct CallStack: Codable {
+    /// Indicates which thread caused the crash
     public var threadAttributed: Bool
     public var rootFrames: [Frame]
 
@@ -41,6 +48,11 @@ public struct CallStack: Codable {
     public init(threadAttributed: Bool, rootFrames: [Frame]) {
         self.threadAttributed = threadAttributed
         self.rootFrames = rootFrames
+    }
+
+    /// Returns a single array of Frame objects
+    public var frames: [Frame] {
+        return rootFrames.flatMap({ [$0] + $0.flattenedFrames })
     }
 }
 

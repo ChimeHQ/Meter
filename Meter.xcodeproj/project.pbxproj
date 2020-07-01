@@ -13,6 +13,7 @@
 		C99A164924AB52F300C52573 /* Meter.h in Headers */ = {isa = PBXBuildFile; fileRef = C99A163B24AB52F300C52573 /* Meter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C99A165324AB531E00C52573 /* CallStackTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99A165224AB531E00C52573 /* CallStackTree.swift */; };
 		C99A165524AB533500C52573 /* CallStackTreeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99A165424AB533500C52573 /* CallStackTreeTests.swift */; };
+		C9E3F83B24AC9B2E00846A36 /* real_report.json in Resources */ = {isa = PBXBuildFile; fileRef = C9E3F83A24AC9B2E00846A36 /* real_report.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		C99A164824AB52F300C52573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C99A165224AB531E00C52573 /* CallStackTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStackTree.swift; sourceTree = "<group>"; };
 		C99A165424AB533500C52573 /* CallStackTreeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStackTreeTests.swift; sourceTree = "<group>"; };
+		C9E3F83A24AC9B2E00846A36 /* real_report.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = real_report.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,12 +93,21 @@
 		C99A164524AB52F300C52573 /* MeterTests */ = {
 			isa = PBXGroup;
 			children = (
+				C9E3F83924AC9B1300846A36 /* Resources */,
 				C99A164824AB52F300C52573 /* Info.plist */,
 				C99A165424AB533500C52573 /* CallStackTreeTests.swift */,
 				C998F71B24AB5A490027E448 /* MeterTests.xcconfig */,
 				C95B96BE24AB7BDC001511B8 /* PayloadProviderTests.swift */,
 			);
 			path = MeterTests;
+			sourceTree = "<group>";
+		};
+		C9E3F83924AC9B1300846A36 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C9E3F83A24AC9B2E00846A36 /* real_report.json */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -198,6 +209,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9E3F83B24AC9B2E00846A36 /* real_report.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
