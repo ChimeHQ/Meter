@@ -63,7 +63,7 @@ public struct CallStackTree: Codable {
     public var callStacks: [CallStack]
     public var callStackPerThread: Bool
 
-    static func from(data: Data) throws -> CallStackTree {
+    public static func from(data: Data) throws -> CallStackTree {
         return try JSONDecoder().decode(CallStackTree.self, from: data)
     }
 
