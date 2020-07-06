@@ -21,7 +21,7 @@ class PayloadProviderTests: XCTestCase {
         let provider = PayloadProvider.shared
         let subscriber = Subscriber()
 
-        provider.addSubscriber(subscriber)
+        provider.add(subscriber)
 
         let expectation = XCTestExpectation(description: "payload delivery")
         var receivedPayloads: [DiagnosticPayload]?
@@ -52,5 +52,24 @@ class PayloadProviderTests: XCTestCase {
         let receivedCrash = receivedPayloads?[0].crashDiagnostics?[0]
 
         XCTAssertEqual(receivedCrash?.applicationVersion, "1.0")
+    }
+
+    func testRemovedSubscriber() {
+        let provider = PayloadProvider.shared
+        let subscriber = Subscriber()
+
+        provider.add(subscriber)
+        let expectation = XCTestExpectation(description: "payload delivery")
+        expectation.isInverted = true
+
+        subscriber.onReceiveHandler = { (_) in
+            expectation.fulfill()
+        }
+
+        provider.remove(subscriber)
+
+        provider.deliver([])
+
+        wait(for: [expectation], timeout: 1.0)
     }
 }

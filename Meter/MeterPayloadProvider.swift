@@ -76,16 +76,16 @@ public class PayloadProvider {
         queue.maxConcurrentOperationCount = 1
     }
 
-    public func addSubscriber(_ subscriber: PayloadSubscriber) {
+    public func add(_ subscriber: PayloadSubscriber) {
         // make sure to avoid duplicates
-        removeSubscriber(subscriber)
+        remove(subscriber)
 
         queue.addOperation {
             self.subscribers.append(subscriber)
         }
     }
 
-    public func removeSubscriber(_ subscriber: PayloadSubscriber) {
+    public func remove(_ subscriber: PayloadSubscriber) {
         queue.addOperation {
             guard let idx = self.subscribers.firstIndex(where: { $0 === subscriber }) else {
                 // Match MetricKit semantics of silently ignoring this situation
