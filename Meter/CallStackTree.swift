@@ -30,6 +30,10 @@ public struct Frame: Codable {
     public var flattenedFrames: [Frame] {
         return subFrames?.flatMap({ [$0] + $0.flattenedFrames }) ?? []
     }
+
+    public var binaryRelativeAddress: Int {
+        return address - offsetIntoBinaryTextSegment
+    }
 }
 
 extension Frame: Hashable {

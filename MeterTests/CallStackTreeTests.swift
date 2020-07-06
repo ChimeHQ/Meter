@@ -47,6 +47,7 @@ class CallStackTreeTests: XCTestCase {
         XCTAssertEqual(frame.sampleCount, 20)
         XCTAssertEqual(frame.binaryName, "testBinaryName")
         XCTAssertEqual(frame.address, 74565)
+        XCTAssertEqual(frame.binaryRelativeAddress, 74565 - 123)
     }
 
     func testRealPayloadWithSubframes() throws {
