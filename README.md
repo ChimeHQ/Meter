@@ -35,7 +35,7 @@ As of iOS 14 beta 1, the MetricKit API for crash reporting is unwieldy. In parti
 let data = mxTree.jsonRepresentation()
 let tree = try CallStackTree.from(data: data)
 
-for frame intree.callStacks[0].frames {
+for frame in tree.callStacks[0].frames {
     print("\(frame.address) \(frame.binaryName) \(frame.binaryUUID)")
 }
 ```
