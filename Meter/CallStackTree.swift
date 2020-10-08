@@ -11,14 +11,14 @@ import MetricKit
 #endif
 
 public struct Frame: Codable {
-    public var binaryUUID: UUID
-    public var offsetIntoBinaryTextSegment: Int
-    public var sampleCount: Int
-    public var binaryName: String
+    public var binaryUUID: UUID?
+    public var offsetIntoBinaryTextSegment: Int?
+    public var sampleCount: Int?
+    public var binaryName: String?
     public var address: Int
     public var subFrames: [Frame]?
 
-    public init(binaryUUID: UUID, offsetIntoBinaryTextSegment: Int, sampleCount: Int, binaryName: String, address: Int, subFrames: [Frame]) {
+    public init(binaryUUID: UUID? = nil, offsetIntoBinaryTextSegment: Int? = nil, sampleCount: Int? = nil, binaryName: String? = nil, address: Int, subFrames: [Frame]) {
         self.binaryUUID = binaryUUID
         self.offsetIntoBinaryTextSegment = offsetIntoBinaryTextSegment
         self.sampleCount = sampleCount
@@ -31,15 +31,17 @@ public struct Frame: Codable {
         return subFrames?.flatMap({ [$0] + $0.flattenedFrames }) ?? []
     }
 
-    public var binaryRelativeAddress: Int {
-        return address - offsetIntoBinaryTextSegment
+    public var binaryRelativeAddress: Int? {
+        guard let offset = offsetIntoBinaryTextSegment else { return nil}
+
+        return address - offset
     }
 }
 
 extension Frame: Hashable {
 }
 
-public struct CallStack: Codable {
+public class CallStack: NSObject, Codable {
     /// Indicates which thread caused the crash
     public var threadAttributed: Bool
     public var rootFrames: [Frame]
@@ -60,43 +62,35 @@ public struct CallStack: Codable {
     }
 }
 
-extension CallStack: Hashable {
-}
-
-public struct CallStackTree: Codable {
-    public var callStacks: [CallStack]
-    public var callStackPerThread: Bool
+public class CallStackTree: Codable {
+    public let callStacks: [CallStack]
+    public let callStackPerThread: Bool
 
     public static func from(data: Data) throws -> CallStackTree {
         return try JSONDecoder().decode(CallStackTree.self, from: data)
     }
 
-    // I would like to add this API, but I'm unsure how to annotate it correctly so
-    // it builds for all platforms with Xcode 11 and 12...
-//#if os(iOS)
-//    @available(iOS 14.0, *)
-//    @available(macCatalyst, unavailable)
-//    @available(tvOS, unavailable)
-//    static func from(callStackTree: MXCallStackTree) throws -> CallStackTree {
-//        let data = callStackTree.jsonRepresentation()
-//
-//        return try from(data: data)
-//    }
-//#endif
+    #if os(iOS)
+    @available(iOS 14.0, *)
+    static func from(callStackTree: MXCallStackTree) throws -> CallStackTreeProtocol {
+        let data = callStackTree.jsonRepresentation()
+
+        return try from(data: data)
+    }
+    #endif
 
     public init(callStacks: [CallStack], callStackPerThread: Bool) {
         self.callStacks = callStacks
         self.callStackPerThread = callStackPerThread
     }
+}
 
-    // I'd really prefer to have this function match the MetricKit
-    // signature, but JSON encoding can fail, and I'd prefer not
-    // to make that failure silent.
-    public func JSONRepresentation() throws -> Data {
-        return try JSONEncoder().encode(self)
+extension CallStackTree: CallStackTreeProtocol {
+    public func JSONRepresentation() -> Data {
+        do {
+            return try JSONEncoder().encode(self)
+        } catch {
+            return Data()
+        }
     }
 }
-
-extension CallStackTree: Hashable {
-}
-

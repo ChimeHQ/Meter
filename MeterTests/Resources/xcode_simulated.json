@@ -1,0 +1,131 @@
+{
+  "crashDiagnostics" : [
+    {
+      "version" : "1.0.0",
+      "callStackTree" : {
+        "callStacks" : [
+          {
+            "threadAttributed" : true,
+            "callStackRootFrames" : [
+              {
+                "binaryUUID" : "CDB53DDB-2337-4933-B62F-4356E6174AF0",
+                "offsetIntoBinaryTextSegment" : 123,
+                "sampleCount" : 20,
+                "binaryName" : "testBinaryName",
+                "address" : 74565
+              }
+            ]
+          }
+        ],
+        "callStackPerThread" : true
+      },
+      "diagnosticMetaData" : {
+        "appBuildVersion" : "1",
+        "appVersion" : "1.0",
+        "regionFormat" : "CA",
+        "exceptionType" : 1,
+        "osVersion" : "iPhone OS 14.0.1 (18A393)",
+        "deviceType" : "iPhone10,2",
+        "signal" : 11,
+        "exceptionCode" : 0,
+        "platformArchitecture" : "arm64",
+        "terminationReason" : "Namespace SIGNAL, Code 0xb",
+        "virtualMemoryRegionInfo" : "0 is not in any region.  Bytes before following region: 4000000000 REGION TYPE                      START - END             [ VSIZE] PRT\/MAX SHRMOD  REGION DETAIL UNUSED SPACE AT START ---> __TEXT                 0000000000000000-0000000000000000 [   32K] r-x\/r-x SM=COW  ...pp\/Test"
+      }
+    }
+  ],
+  "timeStampEnd" : "2020-10-10 19:35:24 +0000",
+  "hangDiagnostics" : [
+    {
+      "version" : "1.0.0",
+      "callStackTree" : {
+        "callStacks" : [
+          {
+            "threadAttributed" : true,
+            "callStackRootFrames" : [
+              {
+                "binaryUUID" : "CDB53DDB-2337-4933-B62F-4356E6174AF0",
+                "offsetIntoBinaryTextSegment" : 123,
+                "sampleCount" : 20,
+                "binaryName" : "testBinaryName",
+                "address" : 74565
+              }
+            ]
+          }
+        ],
+        "callStackPerThread" : true
+      },
+      "diagnosticMetaData" : {
+        "appBuildVersion" : "1",
+        "appVersion" : "1.0",
+        "regionFormat" : "CA",
+        "hangDuration" : "20 secs.",
+        "osVersion" : "iPhone OS 14.0.1 (18A393)",
+        "deviceType" : "iPhone10,2",
+        "platformArchitecture" : "arm64"
+      }
+    }
+  ],
+  "cpuExceptionDiagnostics" : [
+    {
+      "version" : "1.0.0",
+      "callStackTree" : {
+        "callStacks" : [
+          {
+            "callStackRootFrames" : [
+              {
+                "binaryUUID" : "50E04296-0089-4EA2-9125-9C7E2D6CE8E6",
+                "offsetIntoBinaryTextSegment" : 123,
+                "sampleCount" : 20,
+                "binaryName" : "testBinaryName",
+                "address" : 74565
+              }
+            ]
+          }
+        ],
+        "callStackPerThread" : false
+      },
+      "diagnosticMetaData" : {
+        "appBuildVersion" : "1",
+        "appVersion" : "1.0",
+        "regionFormat" : "CA",
+        "osVersion" : "iPhone OS 14.0.1 (18A393)",
+        "deviceType" : "iPhone10,2",
+        "platformArchitecture" : "arm64",
+        "totalCPUTime" : "20 secs.",
+        "totalSampledTime" : "20 secs."
+      }
+    }
+  ],
+  "timeStampBegin" : "2020-10-10 19:35:24 +0000",
+  "diskWriteExceptionDiagnostics" : [
+    {
+      "version" : "1.0.0",
+      "callStackTree" : {
+        "callStacks" : [
+          {
+            "callStackRootFrames" : [
+              {
+                "binaryUUID" : "50E04296-0089-4EA2-9125-9C7E2D6CE8E6",
+                "offsetIntoBinaryTextSegment" : 123,
+                "sampleCount" : 20,
+                "binaryName" : "testBinaryName",
+                "address" : 74565
+              }
+            ]
+          }
+        ],
+        "callStackPerThread" : false
+      },
+      "diagnosticMetaData" : {
+        "appBuildVersion" : "1",
+        "appVersion" : "1.0",
+        "regionFormat" : "CA",
+        "writesCaused" : "2,000 byte",
+        "osVersion" : "iPhone OS 14.0.1 (18A393)",
+        "deviceType" : "iPhone10,2",
+        "platformArchitecture" : "arm64"
+      }
+    }
+  ]
+}

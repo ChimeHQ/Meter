@@ -6,77 +6,41 @@
 //
 
 import Foundation
+import os.log
+#if os(iOS)
+import MetricKit
+#endif
 
-@objc public protocol PayloadSubscriber {
-    @objc optional func didReceive(_ payloads: [DiagnosticPayload])
+public protocol MeterPayloadSubscriber: AnyObject {
+    func didReceive(_ payloads: [DiagnosticPayloadProtocol])
 }
 
-public class Diagnostic: NSObject {
-    public let callStackTree: CallStackTree
-    public let applicationVersion: String
+public class MeterPayloadManager: NSObject {
+    public static var shared: MeterPayloadManager = MeterPayloadManager()
 
-    public init(callStackTree: CallStackTree, applicationVersion: String) {
-        self.callStackTree = callStackTree
-        self.applicationVersion = applicationVersion
-    }
-}
-
-public class CrashDiagnostic: Diagnostic {
-    public let terminationReason: String
-    public let virtualMemoryRegionInfo: String
-    public let exceptionType: String
-    public let exceptionCode: String
-    public let signal: String
-
-    public init(callStackTree: CallStackTree, applicationVersion: String, terminationReason: String, virtualMemoryRegionInfo: String = "", exceptionType: String = "", exceptionCode: String = "", signal: String = "") {
-        self.terminationReason = terminationReason
-        self.virtualMemoryRegionInfo = virtualMemoryRegionInfo
-        self.exceptionType = exceptionType
-        self.exceptionCode = exceptionCode
-        self.signal = signal
-
-        super.init(callStackTree: callStackTree, applicationVersion: applicationVersion)
-    }
-}
-
-public class DiagnosticPayload: NSObject {
-    public let timeStampBegin: Date
-    public let timeStampEnd: Date
-
-    public let crashDiagnostics: [CrashDiagnostic]?
-
-    public init(timeStampBegin: Date, timeStampEnd: Date, crashes: [CrashDiagnostic]?) {
-        self.timeStampBegin = timeStampBegin
-        self.timeStampEnd = timeStampEnd
-        self.crashDiagnostics = crashes
-
-        super.init()
-    }
-
-    public convenience init(dateRange: Range<Date>, crashes: [CrashDiagnostic]) {
-        self.init(timeStampBegin: dateRange.lowerBound, timeStampEnd: dateRange.upperBound, crashes: crashes)
-    }
-
-    public var dateRange: Range<Date> {
-        return timeStampBegin..<timeStampEnd
-    }
-}
-
-public class PayloadProvider {
-    public static var shared: PayloadProvider = PayloadProvider()
-
-    private var subscribers: [PayloadSubscriber]
+    private var subscribers: [MeterPayloadSubscriber]
     private let queue: OperationQueue
+    private let logger: OSLog
+    public var deliverMetricKitDiagnostics = true
 
-    public init() {
+    public override init() {
         self.subscribers = []
         self.queue = OperationQueue()
+        self.logger = OSLog(subsystem: "com.chimehq.Meter", category: "PayloadProvider")
+
+        super.init()
 
         queue.name = "com.chimehq.Meter.PayloadProvider"
         queue.maxConcurrentOperationCount = 1
+
+        #if os(iOS)
+        if #available(iOS 14.0, *) {
+            MXMetricManager.shared.add(self)
+        }
+        #endif
     }
 
-    public func add(_ subscriber: PayloadSubscriber) {
+    public func add(_ subscriber: MeterPayloadSubscriber) {
         // make sure to avoid duplicates
         remove(subscriber)
 
@@ -85,10 +49,11 @@ public class PayloadProvider {
         }
     }
 
-    public func remove(_ subscriber: PayloadSubscriber) {
+    public func remove(_ subscriber: MeterPayloadSubscriber) {
         queue.addOperation {
             guard let idx = self.subscribers.firstIndex(where: { $0 === subscriber }) else {
                 // Match MetricKit semantics of silently ignoring this situation
+                os_log("No matching subscriber to remove", log: self.logger, type: .fault)
                 return
             }
 
@@ -97,14 +62,41 @@ public class PayloadProvider {
     }
 }
 
-extension PayloadProvider {
-    public func deliver(_ payloads: [DiagnosticPayload]) {
+extension MeterPayloadManager {
+    public func deliver(_ payloads: [DiagnosticPayloadProtocol]) {
+        if payloads.isEmpty {
+            os_log("Asked to deliver an empty payload array", log: self.logger, type: .fault)
+            return
+        }
+
         queue.addOperation {
+            if self.subscribers.isEmpty {
+                os_log("Asked to deliver payloads without any subscribers", log: self.logger, type: .fault)
+                return
+            }
+
             for sub in self.subscribers {
                 self.queue.addOperation {
-                    sub.didReceive?(payloads)
+                    sub.didReceive(payloads)
                 }
             }
         }
     }
 }
+
+#if os(iOS)
+@available(iOS 13.0, *)
+extension MeterPayloadManager: MXMetricManagerSubscriber {
+    public func didReceive(_ payloads: [MXMetricPayload]) {
+    }
+
+    @available(iOS 14.0, *)
+    public func didReceive(_ payloads: [MXDiagnosticPayload]) {
+        guard deliverMetricKitDiagnostics else { return }
+        
+        let payloads = payloads.map({ MXDiagnosticPayloadWrapper(payload: $0) })
+
+        deliver(payloads)
+    }
+}
+#endif

@@ -13,6 +13,11 @@
 		C99A164924AB52F300C52573 /* Meter.h in Headers */ = {isa = PBXBuildFile; fileRef = C99A163B24AB52F300C52573 /* Meter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C99A165324AB531E00C52573 /* CallStackTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99A165224AB531E00C52573 /* CallStackTree.swift */; };
 		C99A165524AB533500C52573 /* CallStackTreeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99A165424AB533500C52573 /* CallStackTreeTests.swift */; };
+		C9C4FEE82532079900F167BF /* DiagnosticProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C4FEE72532079900F167BF /* DiagnosticProtocol.swift */; };
+		C9C4FEEC253210B600F167BF /* MetricKitWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C4FEEB253210B600F167BF /* MetricKitWrappers.swift */; };
+		C9C4FF212532467400F167BF /* xcode_simulated.json in Resources */ = {isa = PBXBuildFile; fileRef = C9C4FF202532467400F167BF /* xcode_simulated.json */; };
+		C9C4FF2925324BEA00F167BF /* DiagnosticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C4FF2825324BEA00F167BF /* DiagnosticTests.swift */; };
+		C9C4FF332532751900F167BF /* DiagnosticPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C4FF322532751900F167BF /* DiagnosticPayload.swift */; };
 		C9E3F83B24AC9B2E00846A36 /* real_report.json in Resources */ = {isa = PBXBuildFile; fileRef = C9E3F83A24AC9B2E00846A36 /* real_report.json */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +43,11 @@
 		C99A164824AB52F300C52573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C99A165224AB531E00C52573 /* CallStackTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStackTree.swift; sourceTree = "<group>"; };
 		C99A165424AB533500C52573 /* CallStackTreeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStackTreeTests.swift; sourceTree = "<group>"; };
+		C9C4FEE72532079900F167BF /* DiagnosticProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticProtocol.swift; sourceTree = "<group>"; };
+		C9C4FEEB253210B600F167BF /* MetricKitWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricKitWrappers.swift; sourceTree = "<group>"; };
+		C9C4FF202532467400F167BF /* xcode_simulated.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = xcode_simulated.json; sourceTree = "<group>"; };
+		C9C4FF2825324BEA00F167BF /* DiagnosticTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticTests.swift; sourceTree = "<group>"; };
+		C9C4FF322532751900F167BF /* DiagnosticPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticPayload.swift; sourceTree = "<group>"; };
 		C9E3F83A24AC9B2E00846A36 /* real_report.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = real_report.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,6 +96,9 @@
 				C99A165224AB531E00C52573 /* CallStackTree.swift */,
 				C998F71A24AB55A60027E448 /* Meter.xcconfig */,
 				C95B96BC24AB765B001511B8 /* MeterPayloadProvider.swift */,
+				C9C4FEE72532079900F167BF /* DiagnosticProtocol.swift */,
+				C9C4FEEB253210B600F167BF /* MetricKitWrappers.swift */,
+				C9C4FF322532751900F167BF /* DiagnosticPayload.swift */,
 			);
 			path = Meter;
 			sourceTree = "<group>";
@@ -98,6 +111,7 @@
 				C99A165424AB533500C52573 /* CallStackTreeTests.swift */,
 				C998F71B24AB5A490027E448 /* MeterTests.xcconfig */,
 				C95B96BE24AB7BDC001511B8 /* PayloadProviderTests.swift */,
+				C9C4FF2825324BEA00F167BF /* DiagnosticTests.swift */,
 			);
 			path = MeterTests;
 			sourceTree = "<group>";
@@ -106,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				C9E3F83A24AC9B2E00846A36 /* real_report.json */,
+				C9C4FF202532467400F167BF /* xcode_simulated.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -210,6 +225,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9E3F83B24AC9B2E00846A36 /* real_report.json in Resources */,
+				C9C4FF212532467400F167BF /* xcode_simulated.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,7 +237,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C99A165324AB531E00C52573 /* CallStackTree.swift in Sources */,
+				C9C4FF332532751900F167BF /* DiagnosticPayload.swift in Sources */,
+				C9C4FEE82532079900F167BF /* DiagnosticProtocol.swift in Sources */,
 				C95B96BD24AB765B001511B8 /* MeterPayloadProvider.swift in Sources */,
+				C9C4FEEC253210B600F167BF /* MetricKitWrappers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9C4FF2925324BEA00F167BF /* DiagnosticTests.swift in Sources */,
 				C99A165524AB533500C52573 /* CallStackTreeTests.swift in Sources */,
 				C95B96BF24AB7BDC001511B8 /* PayloadProviderTests.swift in Sources */,
 			);
