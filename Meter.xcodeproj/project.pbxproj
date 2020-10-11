@@ -12,7 +12,6 @@
 		C99A164224AB52F300C52573 /* Meter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C99A163824AB52F300C52573 /* Meter.framework */; };
 		C99A164924AB52F300C52573 /* Meter.h in Headers */ = {isa = PBXBuildFile; fileRef = C99A163B24AB52F300C52573 /* Meter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C99A165324AB531E00C52573 /* CallStackTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99A165224AB531E00C52573 /* CallStackTree.swift */; };
-		C99A165524AB533500C52573 /* CallStackTreeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99A165424AB533500C52573 /* CallStackTreeTests.swift */; };
 		C9C4FEE82532079900F167BF /* DiagnosticProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C4FEE72532079900F167BF /* DiagnosticProtocol.swift */; };
 		C9C4FEEC253210B600F167BF /* MetricKitWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C4FEEB253210B600F167BF /* MetricKitWrappers.swift */; };
 		C9C4FF212532467400F167BF /* xcode_simulated.json in Resources */ = {isa = PBXBuildFile; fileRef = C9C4FF202532467400F167BF /* xcode_simulated.json */; };
@@ -42,7 +41,6 @@
 		C99A164124AB52F300C52573 /* MeterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99A164824AB52F300C52573 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C99A165224AB531E00C52573 /* CallStackTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStackTree.swift; sourceTree = "<group>"; };
-		C99A165424AB533500C52573 /* CallStackTreeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStackTreeTests.swift; sourceTree = "<group>"; };
 		C9C4FEE72532079900F167BF /* DiagnosticProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticProtocol.swift; sourceTree = "<group>"; };
 		C9C4FEEB253210B600F167BF /* MetricKitWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricKitWrappers.swift; sourceTree = "<group>"; };
 		C9C4FF202532467400F167BF /* xcode_simulated.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = xcode_simulated.json; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 			children = (
 				C9E3F83924AC9B1300846A36 /* Resources */,
 				C99A164824AB52F300C52573 /* Info.plist */,
-				C99A165424AB533500C52573 /* CallStackTreeTests.swift */,
 				C998F71B24AB5A490027E448 /* MeterTests.xcconfig */,
 				C95B96BE24AB7BDC001511B8 /* PayloadProviderTests.swift */,
 				C9C4FF2825324BEA00F167BF /* DiagnosticTests.swift */,
@@ -249,7 +246,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9C4FF2925324BEA00F167BF /* DiagnosticTests.swift in Sources */,
-				C99A165524AB533500C52573 /* CallStackTreeTests.swift in Sources */,
 				C95B96BF24AB7BDC001511B8 /* PayloadProviderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
