@@ -6,10 +6,9 @@
 Meter is a companion library to [MetricKit](https://developer.apple.com/documentation/metrickit). It aims to provide the following capabilities:
 
 - API for `MXCallStackTree`
+- Types for `MXDiagnostic` emulation and coding
 - `MXMetricManager`-like interface for unsupported platforms
-- On-device symbolication
-
-Meter is still a work in progress.
+- On-device symbolication (still under investigation)
 
 ## Integration
 
@@ -29,7 +28,7 @@ github "ChimeHQ/Meter"
 
 ### Expanded API
 
-As of iOS 14 beta 1, the MetricKit API for crash reporting is unwieldy. In particular, `MXCallStackTree` lacks any kind of interface for interacting with its structure. Meter includes some classes that make it easier to work with.
+The MetricKit API for crash reporting is unwieldy. In particular, `MXCallStackTree` lacks any kind of interface for interacting with its structure. Meter includes some classes that make it easier to work with. In addition to providing an API for `MXCallStackTree`, Meter includes types to emulate MetricKey diagnostics.
 
 ```swift
 let data = mxTree.jsonRepresentation()
@@ -48,10 +47,10 @@ This makes it easier to support the full capabilities when available, and gracef
 
 ```swift
 // adding a subscriber
-PayloadProvider.shared.add(obj)
+MeterPayloadManager.shared.add(obj)
 
-extension MyObject: PayloadSubscriber {
-    func didReceive(_ payloads: [DiagnosticPayload]) {
+extension MyObject: MeterPayloadSubscriber {
+    func didReceive(_ payloads: [DiagnosticPayloadProtocol]) {
         print("received payloads \(payloads)")
     }
 }
