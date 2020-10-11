@@ -57,7 +57,7 @@ extension MyObject: MeterPayloadSubscriber {
 }
 
 // posting diagnostics
-PayloadProvider.shared.deliver(payloads)
+MeterPayloadManager.shared.deliver(payloads)
 ```
 
 ### On-Device Symbolication
