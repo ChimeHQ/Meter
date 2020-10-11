@@ -23,6 +23,16 @@ public class MeterPayloadManager: NSObject {
     private let logger: OSLog
     public var deliverMetricKitDiagnostics = true
 
+    public static var metricKitDiagnosticsSupported: Bool {
+        #if os(iOS)
+        if #available(iOS 14.0, *) {
+            return true
+        }
+        #endif
+
+        return false
+    }
+
     public override init() {
         self.subscribers = []
         self.queue = OperationQueue()
