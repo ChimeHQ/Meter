@@ -28,7 +28,7 @@ github "ChimeHQ/Meter"
 
 ### Expanded API
 
-The MetricKit API for crash reporting is unwieldy. In particular, `MXCallStackTree` lacks any kind of interface for interacting with its structure. Meter includes some classes that make it easier to work with. In addition to providing an API for `MXCallStackTree`, Meter includes types to emulate MetricKey diagnostics.
+The MetricKit API for crash reporting is unwieldy. In particular, `MXCallStackTree` lacks any kind of interface for interacting with its structure. Meter includes some classes that make it easier to work with. In addition to providing an API for `MXCallStackTree`, Meter includes types to emulate and parse MetricKit diagnostics.
 
 ```swift
 let data = mxTree.jsonRepresentation()
@@ -41,9 +41,7 @@ for frame in tree.callStacks[0].frames {
 
 ### MXMetricManager and Diagnostics Polyfill
 
-MetricKit's crash reporting facilities will require iOS 14, and isn't supported at all for tvOS, watchOS, or macOS. You may want to start moving towards using it as a standard interface between your app and whatever system consumes the data. Meter offers an API that's very similar to MetricKit's `MXMetricManager` to help do just that.
-
-This makes it easier to support the full capabilities when available, and gracefully degrade when they aren't. It will still be up to you to translate other sources of crash data. But, it can be nice to have a uniform interface to whatever backend system you are using to consume the reports. And, as you move towards an iOS 14 minimum, and as (hopefully) Apple starts supporting MetricKit on more platforms, its easier to pull out the legacy code.
+MetricKit's crash reporting facilities require iOS 14, and isn't supported at all for tvOS, watchOS, or macOS. You may want to start moving towards using it as a standard interface between your app and whatever system consumes the data. Meter offers an API that's very similar to MetricKit's `MXMetricManager` to help do just that.
 
 ```swift
 // adding a subscriber
@@ -60,9 +58,15 @@ extension MyObject: MeterPayloadSubscriber {
 MeterPayloadManager.shared.deliver(payloads)
 ```
 
+This makes it easier to support the full capabilities of MetricKit when available, and gracefully degrade when they aren't. It can be nice to have a uniform interface to whatever backend system you are using to consume the reports. And, as you move towards an iOS 14 minimum, and as (hopefully) Apple starts supporting MetricKit on more platforms, it will be easier to pull out Meter altogether.
+
+Backwards compatibility is still up to you, though. One solution is [ImpactMeterAdapter](https://github.com/ChimeHQ/ImpactMeterAdapter), which uses [Impact](https://github.com/ChimeHQ/Impact) to collect crash data for OSes that don't support `MXCrashDiagnostic`.
+
+If you're also looking for a way to transmit report data to your server, check out [Wells](https://github.com/ChimeHQ/Wells).
+
 ### On-Device Symbolication
 
-The stack traces provided by MetricKit, like other types of crash logs, are not symbolicated. There are a bunch of different ways to tackle this problem, but one very convenient option is just to do it as a post-processing step on the device where the crash occured. The `dlopen` family of APIs could be one approach. It has had some real limitions in the past, particularly on iOS. But, still worth a look.
+The stack traces provided by MetricKit, like other types of crash logs, are not symbolicated. There are a bunch of different ways to tackle this problem, but one very convenient option is just to do it as a post-processing step on the device where the crash occurred. The `dlopen` family of APIs could be one approach. It has had some real limitions in the past, particularly on iOS. But, still worth a look.
 
 Right now, this functionality is still in the investigation phase. But, if you have thoughts, please get in touch!
 
