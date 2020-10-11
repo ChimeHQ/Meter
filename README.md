@@ -51,6 +51,7 @@ MeterPayloadManager.shared.add(obj)
 
 extension MyObject: MeterPayloadSubscriber {
     func didReceive(_ payloads: [DiagnosticPayloadProtocol]) {
+        // this will be called for both simulated payloads *and* MeterKit payloads on OSes it supports
         print("received payloads \(payloads)")
     }
 }
