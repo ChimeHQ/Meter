@@ -16,46 +16,6 @@ class Subscriber: MeterPayloadSubscriber {
     }
 }
 
-class TestableDiagnosticPayload: DiagnosticPayloadProtocol {
-    let timeStampBegin: Date
-    let timeStampEnd: Date
-    let crashDiagnostics: [CrashDiagnosticProtocol]?
-
-    init(timeStampBegin: Date, timeStampEnd: Date, crashDiagnostics: [CrashDiagnosticProtocol]?) {
-        self.timeStampBegin = timeStampBegin
-        self.timeStampEnd = timeStampEnd
-        self.crashDiagnostics = crashDiagnostics
-    }
-
-    func jsonRepresentation() -> Data {
-        return Data()
-    }
-}
-
-class TestableCrashDiagnostic: CrashDiagnosticProtocol {
-    let callStackTree: CallStackTreeProtocol
-    let terminationReason: String?
-    let virtualMemoryRegionInfo: String?
-    let exceptionType: NSNumber?
-    let exceptionCode: NSNumber?
-    let signal: NSNumber?
-    let applicationVersion: String
-
-    func jsonRepresentation() -> Data {
-        return Data()
-    }
-
-    init(applicationVersion: String, callStackTree: CallStackTreeProtocol, terminationReason: String?, virtualMemoryRegionInfo: String?, exceptionType: NSNumber?, exceptionCode: NSNumber?, signal: NSNumber?) {
-        self.callStackTree = callStackTree
-        self.terminationReason = terminationReason
-        self.virtualMemoryRegionInfo = virtualMemoryRegionInfo
-        self.exceptionType = exceptionType
-        self.exceptionCode = exceptionCode
-        self.signal = signal
-        self.applicationVersion = applicationVersion
-    }
-}
-
 class PayloadProviderTests: XCTestCase {
     func testReceivingPayloads() {
         let provider = MeterPayloadManager.shared
@@ -72,15 +32,21 @@ class PayloadProviderTests: XCTestCase {
             expectation.fulfill()
         }
 
-        let simulatedCrash = TestableCrashDiagnostic(applicationVersion: "1.0",
-                                               callStackTree: CallStackTree(callStacks: [], callStackPerThread: true),
-                                               terminationReason: "crash",
-                                               virtualMemoryRegionInfo: "",
-                                               exceptionType: 0,
-                                               exceptionCode: 0,
-                                               signal: 0)
+        let metaData = CrashMetaData(deviceType: "device",
+                                     applicationBuildVersion: "1",
+                                     applicationVersion: "1.0",
+                                     osVersion: "abcdef",
+                                     platformArchitecture: "arm64",
+                                     regionFormat: "CA",
+                                     virtualMemoryRegionInfo: nil,
+                                     exceptionType: 5,
+                                     terminationReason: "crash",
+                                     exceptionCode: 5,
+                                     signal: 5)
+        let simulatedCrash = CrashDiagnostic(metaData: metaData,
+                                             callStackTree: CallStackTree(callStacks: [], callStackPerThread: true))
 
-        let simulatedPayloads = [TestableDiagnosticPayload(timeStampBegin: Date(), timeStampEnd: Date(), crashDiagnostics: [simulatedCrash])]
+        let simulatedPayloads = [DiagnosticPayload(timeStampBegin: Date(), timeStampEnd: Date(), crashDiagnostics: [simulatedCrash])]
 
         provider.deliver(simulatedPayloads)
 

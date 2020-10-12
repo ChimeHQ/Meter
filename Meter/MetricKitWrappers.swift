@@ -35,6 +35,10 @@ public class MXDiagnosticPayloadWrapper: DiagnosticPayloadProtocol {
 }
 
 @available(iOS 14.0, *)
+extension MXMetaData: MetaDataProtocol {
+}
+
+@available(iOS 14.0, *)
 public class MXCrashDiagnosticDiagnosticWrapper: CrashDiagnosticProtocol {
     private let diagnostic: MXCrashDiagnostic
 
@@ -42,6 +46,10 @@ public class MXCrashDiagnosticDiagnosticWrapper: CrashDiagnosticProtocol {
         self.diagnostic = diagnostic
     }
 
+    public var metaData: MetaDataProtocol {
+        return diagnostic.metaData
+    }
+    
     public var applicationVersion: String {
         return diagnostic.applicationVersion
     }
@@ -83,7 +91,7 @@ public class MXCallStackTreeWrapper: CallStackTreeProtocol {
         self.tree = tree
     }
 
-    public func JSONRepresentation() -> Data {
+    public func jsonRepresentation() -> Data {
         return JSONData
     }
 

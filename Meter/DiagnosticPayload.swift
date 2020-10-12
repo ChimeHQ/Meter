@@ -10,7 +10,7 @@ import Foundation
 import MetricKit
 #endif
 
-public class DiagnosticPayload: Codable {
+public class DiagnosticPayload: DiagnosticPayloadProtocol, Codable {
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
 
@@ -20,9 +20,15 @@ public class DiagnosticPayload: Codable {
         return formatter
     }()
 
+    enum CodingKeys: String, CodingKey {
+        case timeStampBegin
+        case timeStampEnd
+        case internalCrashDiagnostics = "crashDiagnostics"
+    }
+
     public let timeStampBegin: Date
     public let timeStampEnd: Date
-    public let crashDiagnostics: [CrashDiagnostic]?
+    private let internalCrashDiagnostics: [CrashDiagnostic]?
 
     public static func from(data: Data) throws -> DiagnosticPayload {
         let decoder = JSONDecoder()
@@ -44,7 +50,11 @@ public class DiagnosticPayload: Codable {
     public init(timeStampBegin: Date, timeStampEnd: Date, crashDiagnostics: [CrashDiagnostic]?) {
         self.timeStampBegin = timeStampBegin
         self.timeStampEnd = timeStampEnd
-        self.crashDiagnostics = crashDiagnostics
+        self.internalCrashDiagnostics = crashDiagnostics
+    }
+
+    public var crashDiagnostics: [CrashDiagnosticProtocol]? {
+        return internalCrashDiagnostics
     }
 
     public func jsonRepresentation() -> Data {
@@ -56,7 +66,8 @@ public class DiagnosticPayload: Codable {
     }
 }
 
-public class CrashMetaData: Codable {
+public class CrashMetaData: MetaDataProtocol, Codable {
+    public let deviceType: String
     public let applicationBuildVersion: String
     public let applicationVersion: String
     public let osVersion: String
@@ -79,9 +90,11 @@ public class CrashMetaData: Codable {
         case exceptionCode = "exceptionCode"
         case signal = "signal"
         case exceptionType = "exceptionType"
+        case deviceType
     }
 
-    public init(applicationBuildVersion: String, applicationVersion: String, osVersion: String, platformArchitecture: String, regionFormat: String, virtualMemoryRegionInfo: String?, exceptionType: Int?, terminationReason: String?, exceptionCode: Int?, signal: Int?) {
+    public init(deviceType: String, applicationBuildVersion: String, applicationVersion: String, osVersion: String, platformArchitecture: String, regionFormat: String, virtualMemoryRegionInfo: String?, exceptionType: Int?, terminationReason: String?, exceptionCode: Int?, signal: Int?) {
+        self.deviceType = deviceType
         self.applicationBuildVersion = applicationBuildVersion
         self.applicationVersion = applicationVersion
         self.osVersion = osVersion
@@ -93,31 +106,35 @@ public class CrashMetaData: Codable {
         self.exceptionCode = exceptionCode
         self.signal = signal
     }
+
+    public func jsonRepresentation() -> Data {
+        return (try? JSONEncoder().encode(self)) ?? Data()
+    }
 }
 
 public class CrashDiagnostic: Codable {
     public let version: String
-    public let metaData: CrashMetaData
+    private let internalMetaData: CrashMetaData
     private let internalCallStackTree: CallStackTree
 
     enum CodingKeys: String, CodingKey {
         case version
-        case metaData = "diagnosticMetaData"
+        case internalMetaData = "diagnosticMetaData"
         case internalCallStackTree = "callStackTree"
     }
 
     public init(metaData: CrashMetaData, callStackTree: CallStackTree) {
         self.version = "1.0.0"
-        self.metaData = metaData
+        self.internalMetaData = metaData
         self.internalCallStackTree = callStackTree
     }
 
     public var applicationVersion: String {
-        return metaData.applicationVersion
+        return internalMetaData.applicationVersion
     }
 
     public var virtualMemoryRegionInfo: String? {
-        return metaData.virtualMemoryRegionInfo
+        return internalMetaData.virtualMemoryRegionInfo
     }
 
     public func jsonRepresentation() -> Data {
@@ -126,16 +143,20 @@ public class CrashDiagnostic: Codable {
 }
 
 extension CrashDiagnostic: CrashDiagnosticProtocol {
+    public var metaData: MetaDataProtocol {
+        return internalMetaData
+    }
+
     public var terminationReason: String? {
-        return metaData.terminationReason
+        return internalMetaData.terminationReason
     }
 
     public var signal: NSNumber? {
-        return metaData.signal.map({ NSNumber(value: $0) })
+        return internalMetaData.signal.map({ NSNumber(value: $0) })
     }
 
     public var exceptionCode: NSNumber? {
-        return metaData.exceptionCode.map({ NSNumber(value: $0) })
+        return internalMetaData.exceptionCode.map({ NSNumber(value: $0) })
     }
 
     public var callStackTree: CallStackTreeProtocol {
@@ -143,6 +164,6 @@ extension CrashDiagnostic: CrashDiagnosticProtocol {
     }
 
     public var exceptionType: NSNumber? {
-        return metaData.exceptionType.map({ NSNumber(value: $0) })
+        return internalMetaData.exceptionType.map({ NSNumber(value: $0) })
     }
 }

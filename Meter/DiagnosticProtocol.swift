@@ -20,25 +20,28 @@ public protocol DiagnosticPayloadProtocol {
 }
 
 public extension DiagnosticPayloadProtocol {
-    func JSONRepresentation() -> Data {
-        return jsonRepresentation()
-    }
-
     var dateRange: Range<Date> {
         return timeStampBegin..<timeStampEnd
     }
 }
 
-public protocol DiagnosticProtocol {
-    var applicationVersion: String { get }
+public protocol MetaDataProtocol {
+    var regionFormat: String { get }
+    var osVersion: String { get }
+    var deviceType: String { get }
+    var applicationBuildVersion: String { get }
+
+    @available(iOS 14.0, *)
+    var platformArchitecture: String { get }
 
     func jsonRepresentation() -> Data
 }
 
-public extension DiagnosticProtocol {
-    func JSONRepresentation() -> Data {
-        return jsonRepresentation()
-    }
+public protocol DiagnosticProtocol {
+    var applicationVersion: String { get }
+    var metaData: MetaDataProtocol { get }
+
+    func jsonRepresentation() -> Data
 }
 
 public protocol CrashDiagnosticProtocol: DiagnosticProtocol {
@@ -51,7 +54,7 @@ public protocol CrashDiagnosticProtocol: DiagnosticProtocol {
 }
 
 public protocol CallStackTreeProtocol {
-    func JSONRepresentation() -> Data
+    func jsonRepresentation() -> Data
 
     var callStacks: [CallStack] { get }
     var callStackPerThread: Bool { get }

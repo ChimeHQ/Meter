@@ -24,9 +24,9 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(crashDiagnostic.virtualMemoryRegionInfo?.hasPrefix("0 is not in any region"), true)
         XCTAssertEqual(crashDiagnostic.applicationVersion, "1.0")
         XCTAssertEqual(crashDiagnostic.terminationReason, "Namespace SIGNAL, Code 0xb")
-        XCTAssertEqual(crashDiagnostic.signal, NSNumber(value: 11))
-        XCTAssertEqual(crashDiagnostic.exceptionCode, NSNumber(value: 0))
-        XCTAssertEqual(crashDiagnostic.exceptionType, NSNumber(value: 1))
+        XCTAssertEqual(crashDiagnostic.signal, 11)
+        XCTAssertEqual(crashDiagnostic.exceptionCode, 0)
+        XCTAssertEqual(crashDiagnostic.exceptionType, 1)
 
         let tree = crashDiagnostic.callStackTree
 

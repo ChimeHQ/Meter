@@ -86,7 +86,7 @@ public class CallStackTree: Codable {
 }
 
 extension CallStackTree: CallStackTreeProtocol {
-    public func JSONRepresentation() -> Data {
+    public func jsonRepresentation() -> Data {
         do {
             return try JSONEncoder().encode(self)
         } catch {
