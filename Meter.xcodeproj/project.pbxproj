@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C95B96BD24AB765B001511B8 /* MeterPayloadProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B96BC24AB765B001511B8 /* MeterPayloadProvider.swift */; };
 		C95B96BF24AB7BDC001511B8 /* PayloadProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95B96BE24AB7BDC001511B8 /* PayloadProviderTests.swift */; };
+		C988329C253606930053DE78 /* ios_uncaugh_exception_payload.json in Resources */ = {isa = PBXBuildFile; fileRef = C988329B253606930053DE78 /* ios_uncaugh_exception_payload.json */; };
 		C99A164224AB52F300C52573 /* Meter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C99A163824AB52F300C52573 /* Meter.framework */; };
 		C99A164924AB52F300C52573 /* Meter.h in Headers */ = {isa = PBXBuildFile; fileRef = C99A163B24AB52F300C52573 /* Meter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C99A165324AB531E00C52573 /* CallStackTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99A165224AB531E00C52573 /* CallStackTree.swift */; };
@@ -33,6 +34,7 @@
 /* Begin PBXFileReference section */
 		C95B96BC24AB765B001511B8 /* MeterPayloadProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeterPayloadProvider.swift; sourceTree = "<group>"; };
 		C95B96BE24AB7BDC001511B8 /* PayloadProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayloadProviderTests.swift; sourceTree = "<group>"; };
+		C988329B253606930053DE78 /* ios_uncaugh_exception_payload.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ios_uncaugh_exception_payload.json; sourceTree = "<group>"; };
 		C998F71A24AB55A60027E448 /* Meter.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Meter.xcconfig; sourceTree = "<group>"; };
 		C998F71B24AB5A490027E448 /* MeterTests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = MeterTests.xcconfig; sourceTree = "<group>"; };
 		C99A163824AB52F300C52573 /* Meter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Meter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +120,7 @@
 			children = (
 				C9E3F83A24AC9B2E00846A36 /* real_report.json */,
 				C9C4FF202532467400F167BF /* xcode_simulated.json */,
+				C988329B253606930053DE78 /* ios_uncaugh_exception_payload.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -221,6 +224,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C988329C253606930053DE78 /* ios_uncaugh_exception_payload.json in Resources */,
 				C9E3F83B24AC9B2E00846A36 /* real_report.json in Resources */,
 				C9C4FF212532467400F167BF /* xcode_simulated.json in Resources */,
 			);
