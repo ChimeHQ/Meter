@@ -1,4 +1,4 @@
-[![Github CI](https://github.com/ChimeHQ/Meter/workflows/CI/badge.svg)](https://github.com/ChimeHQ/Meter/actions)
+[![Github CI](https://github.com/stacksift/Meter/workflows/CI/badge.svg)](https://github.com/ChimeHQ/Meter/actions)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
 
 # Meter
@@ -16,14 +16,14 @@ Meter is a companion library to [MetricKit](https://developer.apple.com/document
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/ChimeHQ/Meter.git")
+    .package(url: "https://github.com/stacksift/Meter.git")
 ]
 ```
 
 ### Carthage
 
 ```
-github "ChimeHQ/Meter"
+github "stacksift/Meter"
 ```
 
 ### Expanded API
@@ -60,9 +60,9 @@ MeterPayloadManager.shared.deliver(payloads)
 
 This makes it easier to support the full capabilities of MetricKit when available, and gracefully degrade when they aren't. It can be nice to have a uniform interface to whatever backend system you are using to consume the reports. And, as you move towards an iOS 14 minimum, and as (hopefully) Apple starts supporting MetricKit on more platforms, it will be easier to pull out Meter altogether.
 
-Backwards compatibility is still up to you, though. One solution is [ImpactMeterAdapter](https://github.com/ChimeHQ/ImpactMeterAdapter), which uses [Impact](https://github.com/ChimeHQ/Impact) to collect crash data for OSes that don't support `MXCrashDiagnostic`.
+Backwards compatibility is still up to you, though. One solution is [ImpactMeterAdapter](https://github.com/stacksift/ImpactMeterAdapter), which uses [Impact](https://github.com/stacksift/Impact) to collect crash data for OSes that don't support `MXCrashDiagnostic`.
 
-If you're also looking for a way to transmit report data to your server, check out [Wells](https://github.com/ChimeHQ/Wells).
+If you're also looking for a way to transmit report data to your server, check out [Wells](https://github.com/stacksift/Wells).
 
 ### On-Device Symbolication
 
@@ -72,6 +72,6 @@ Right now, this functionality is still in the investigation phase. But, if you h
 
 ### Suggestions or Feedback
 
-We'd love to hear from you! Get in touch via [twitter](https://twitter.com/chimehq), an issue, or a pull request.
+We'd love to hear from you! Get in touch via [twitter](https://twitter.com/stacksift), an issue, or a pull request.
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
