@@ -31,10 +31,20 @@ public struct Frame: Codable {
         return subFrames?.flatMap({ [$0] + $0.flattenedFrames }) ?? []
     }
 
-    public var binaryRelativeAddress: Int? {
-        guard let offset = offsetIntoBinaryTextSegment else { return nil}
+    public var binaryLoadAddress: Int? {
+        return offsetIntoBinaryTextSegment
+    }
 
-        return address - offset
+    public var approximateBinarySize: Int? {
+        guard let loadAddress = binaryLoadAddress else {
+            return nil
+        }
+
+        if loadAddress > address {
+            return nil
+        }
+
+        return address - loadAddress + 1
     }
 }
 

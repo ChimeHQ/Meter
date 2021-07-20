@@ -45,7 +45,7 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(frame.sampleCount, 20)
         XCTAssertEqual(frame.binaryName, "testBinaryName")
         XCTAssertEqual(frame.address, 74565)
-        XCTAssertEqual(frame.binaryRelativeAddress, 74565 - 123)
+        XCTAssertEqual(frame.binaryLoadAddress, 123)
     }
 
     func testRealPayloadWithSubframes() throws {
@@ -95,5 +95,8 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(frames[31].sampleCount, 1)
         XCTAssertEqual(frames[31].binaryName, "libdyld.dylib")
         XCTAssertEqual(frames[31].address, 6795285912)
+
+        XCTAssertEqual(frames[31].binaryLoadAddress, 6795280384)
+        XCTAssertEqual(frames[31].approximateBinarySize, 5529)
     }
 }
