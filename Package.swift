@@ -10,11 +10,9 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        .target(name: "Meter", dependencies: [], path: "Meter/", exclude: ["Meter.xcconfig", "Info.plist"]),
+        .target(name: "Meter", dependencies: []),
         .testTarget(name: "MeterTests",
                     dependencies: ["Meter"],
-                    path: "MeterTests/",
-                    exclude: ["MeterTests.xcconfig", "Info.plist"],
                     resources: [
                         .copy("Resources"),
                     ]),
