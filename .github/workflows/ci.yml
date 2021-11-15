@@ -7,10 +7,7 @@ on:
   pull_request:
     branches:
       - '**'
-
-env:
-  DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
-        
+  
 jobs:
   xcode_test:
     name: Test on destination ${{ matrix.destination }}
@@ -19,6 +16,9 @@ jobs:
       matrix:
         destination: ["platform=macOS", "platform=iOS Simulator,name=iPhone 8", "platform=tvOS Simulator,name=Apple TV"]
     steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '13.2'
       - uses: actions/checkout@v1
       - name: update submodules
         run: git submodule update --init
@@ -28,6 +28,9 @@ jobs:
     name: Build with Carthage
     runs-on: macOS-latest
     steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '13.2'
       - uses: actions/checkout@v1
       - name: update submodules
         run: git submodule update --init
@@ -37,6 +40,9 @@ jobs:
     name: Test with Swift
     runs-on: macOS-latest
     steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '13.2'
       - uses: actions/checkout@v1
       - name: swift test
         run: swift test
