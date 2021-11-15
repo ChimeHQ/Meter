@@ -9,7 +9,7 @@ on:
       - '**'
 
 jobs:
-  test:
+  xcode_test:
     name: Test on destination ${{ matrix.destination }}
     runs-on: macOS-latest
     strategy:
@@ -21,3 +21,19 @@ jobs:
         run: git submodule update --init
       - name: xcodebuild test ${{ matrix.destination }}
         run: set -o pipefail && xcodebuild test -scheme Meter -destination "${{ matrix.destination }}" | xcpretty
+  carthage_build:
+    name: Build with Carthage
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: update submodules
+        run: git submodule update --init
+      - name: carthage build
+        run: carthage build --no-skip-current --use-xcframeworks
+  swift_test:
+    name: Teset with Swift
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: swift test
+        run: swift test

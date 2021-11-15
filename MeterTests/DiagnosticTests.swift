@@ -10,7 +10,7 @@ import XCTest
 
 class DiagnosticTests: XCTestCase {
     func testReadingSimulatedData() throws {
-        let url = try XCTUnwrap(Bundle(for: DiagnosticTests.self).url(forResource: "xcode_simulated", withExtension: "json"))
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
         let data = try Data(contentsOf: url, options: [])
 
         let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
@@ -19,7 +19,9 @@ class DiagnosticTests: XCTestCase {
 
         XCTAssertEqual(crashDiagnostic.metaData.applicationBuildVersion, "1")
         XCTAssertEqual(crashDiagnostic.metaData.osVersion, "iPhone OS 14.0.1 (18A393)")
-        XCTAssertEqual(crashDiagnostic.metaData.platformArchitecture, "arm64")
+        if #available(iOS 14.0, macOS 12.0, *) {
+            XCTAssertEqual(crashDiagnostic.metaData.platformArchitecture, "arm64")
+        }
         XCTAssertEqual(crashDiagnostic.metaData.regionFormat, "CA")
         XCTAssertEqual(crashDiagnostic.virtualMemoryRegionInfo?.hasPrefix("0 is not in any region"), true)
         XCTAssertEqual(crashDiagnostic.applicationVersion, "1.0")
@@ -49,7 +51,7 @@ class DiagnosticTests: XCTestCase {
     }
 
     func testRealPayloadWithSubframes() throws {
-        let url = try XCTUnwrap(Bundle(for: DiagnosticTests.self).url(forResource: "real_report", withExtension: "json"))
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "real_report", withExtension: "json"))
         let data = try Data(contentsOf: url, options: [])
         let payload = try DiagnosticPayload.from(data: data)
 

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-#if os(iOS)
+#if os(iOS) || os(macOS)
 import MetricKit
 #endif
 
@@ -38,8 +38,8 @@ public class DiagnosticPayload: DiagnosticPayloadProtocol, Codable {
         return try decoder.decode(DiagnosticPayload.self, from: data)
     }
 
-    #if os(iOS)
-    @available(iOS 14.0, *)
+    #if os(iOS) || os(macOS)
+    @available(iOS 14.0, macOS 12.0, *)
     public static func from(payload: MXDiagnosticPayload) throws -> DiagnosticPayload {
         let data = payload.jsonRepresentation()
 

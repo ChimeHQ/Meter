@@ -6,10 +6,10 @@
 //
 
 import Foundation
-#if os(iOS)
+#if os(iOS) || os(macOS)
 import MetricKit
 
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 12.0, *)
 public class MXDiagnosticPayloadWrapper: DiagnosticPayloadProtocol {
     private let payload: MXDiagnosticPayload
 
@@ -34,11 +34,11 @@ public class MXDiagnosticPayloadWrapper: DiagnosticPayloadProtocol {
     }()
 }
 
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 12.0, *)
 extension MXMetaData: MetaDataProtocol {
 }
 
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 12.0, *)
 public class MXCrashDiagnosticDiagnosticWrapper: CrashDiagnosticProtocol {
     private let diagnostic: MXCrashDiagnostic
 
@@ -83,7 +83,7 @@ public class MXCrashDiagnosticDiagnosticWrapper: CrashDiagnosticProtocol {
     }
 }
 
-@available(iOS 14.0, *)
+@available(iOS 14.0, macOS 12.0, *)
 public class MXCallStackTreeWrapper: CallStackTreeProtocol {
     private let tree: MXCallStackTree
 

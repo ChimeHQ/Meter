@@ -7,7 +7,7 @@
 
 import Foundation
 import os.log
-#if os(iOS)
+#if os(iOS) || os(macOS)
 import MetricKit
 #endif
 
@@ -24,8 +24,8 @@ public class MeterPayloadManager: NSObject {
     public var deliverMetricKitDiagnostics = true
 
     public static var metricKitDiagnosticsSupported: Bool {
-        #if os(iOS)
-        if #available(iOS 14.0, *) {
+        #if os(iOS) || os(macOS)
+        if #available(iOS 14.0, macOS 12.0, *) {
             return true
         }
         #endif
@@ -43,8 +43,8 @@ public class MeterPayloadManager: NSObject {
         queue.name = "com.chimehq.Meter.PayloadProvider"
         queue.maxConcurrentOperationCount = 1
 
-        #if os(iOS)
-        if #available(iOS 14.0, *) {
+        #if os(iOS) || os(macOS)
+        if #available(iOS 14.0, macOS 12.0, *) {
             MXMetricManager.shared.add(self)
         }
         #endif
@@ -94,13 +94,15 @@ extension MeterPayloadManager {
     }
 }
 
-#if os(iOS)
-@available(iOS 13.0, *)
+#if os(iOS) || os(macOS)
+@available(iOS 13.0, macOS 12.0, *)
 extension MeterPayloadManager: MXMetricManagerSubscriber {
+    #if os(iOS)
     public func didReceive(_ payloads: [MXMetricPayload]) {
     }
+    #endif
 
-    @available(iOS 14.0, *)
+    @available(iOS 14.0, macOS 12.0, *)
     public func didReceive(_ payloads: [MXDiagnosticPayload]) {
         guard deliverMetricKitDiagnostics else { return }
         

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-#if os(iOS)
+#if os(iOS) || os(macOS)
 import MetricKit
 #endif
 
@@ -31,7 +31,7 @@ public protocol MetaDataProtocol {
     var deviceType: String { get }
     var applicationBuildVersion: String { get }
 
-    @available(iOS 14.0, *)
+    @available(iOS 14.0, macOS 12.0, *)
     var platformArchitecture: String { get }
 
     func jsonRepresentation() -> Data

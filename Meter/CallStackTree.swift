@@ -6,7 +6,7 @@
 //
 
 import Foundation
-#if os(iOS)
+#if os(iOS) || os(macOS)
 import MetricKit
 #endif
 
@@ -80,8 +80,8 @@ public class CallStackTree: Codable {
         return try JSONDecoder().decode(CallStackTree.self, from: data)
     }
 
-    #if os(iOS)
-    @available(iOS 14.0, *)
+    #if os(iOS) || os(macOS)
+    @available(iOS 14.0, macOS 12.0, *)
     static func from(callStackTree: MXCallStackTree) throws -> CallStackTreeProtocol {
         let data = callStackTree.jsonRepresentation()
 

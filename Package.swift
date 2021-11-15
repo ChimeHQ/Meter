@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -10,7 +10,13 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        .target(name: "Meter", dependencies: [], path: "Meter/"),
-        .testTarget(name: "MeterTests", dependencies: ["Meter"], path: "MeterTests/"),
+        .target(name: "Meter", dependencies: [], path: "Meter/", exclude: ["Meter.xcconfig", "Info.plist"]),
+        .testTarget(name: "MeterTests",
+                    dependencies: ["Meter"],
+                    path: "MeterTests/",
+                    exclude: ["MeterTests.xcconfig", "Info.plist"],
+                    resources: [
+                        .copy("Resources"),
+                    ]),
     ]
 )
