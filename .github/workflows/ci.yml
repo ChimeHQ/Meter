@@ -8,6 +8,9 @@ on:
     branches:
       - '**'
 
+env:
+  DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
+        
 jobs:
   xcode_test:
     name: Test on destination ${{ matrix.destination }}
@@ -31,7 +34,7 @@ jobs:
       - name: carthage build
         run: carthage build --no-skip-current --use-xcframeworks
   swift_test:
-    name: Teset with Swift
+    name: Test with Swift
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v1
