@@ -10,6 +10,29 @@ import Foundation
 import MetricKit
 #endif
 
+public struct Binary: Codable, Hashable {
+    public var uuid: UUID
+    public var loadAddress: Int
+    public var approximateSize: Int
+    public var name: String?
+
+    public init(uuid: UUID, loadAddress: Int, approximateSize: Int, name: String?) {
+        self.uuid = uuid
+        self.loadAddress = loadAddress
+        self.approximateSize = approximateSize
+        self.name = name
+    }
+
+    public init?(uuid: String, loadAddress: Int, approximateSize: Int, name: String?) {
+        guard let value = UUID(uuidString: uuid) else { return nil }
+        
+        self.uuid = value
+        self.loadAddress = loadAddress
+        self.approximateSize = approximateSize
+        self.name = name
+    }
+}
+
 public struct Frame: Codable {
     public var binaryUUID: UUID?
     public var offsetIntoBinaryTextSegment: Int?
@@ -45,6 +68,21 @@ public struct Frame: Codable {
         }
 
         return address - loadAddress + 1
+    }
+
+    public var binary: Binary? {
+        guard
+            let uuid = binaryUUID,
+            let loadAddress = binaryLoadAddress,
+            let size = approximateBinarySize
+        else {
+            return nil
+        }
+
+        return Binary(uuid: uuid,
+                      loadAddress: loadAddress,
+                      approximateSize: size,
+                      name: binaryName)
     }
 }
 

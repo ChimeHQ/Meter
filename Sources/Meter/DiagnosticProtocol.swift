@@ -31,7 +31,6 @@ public protocol MetaDataProtocol {
     var deviceType: String { get }
     var applicationBuildVersion: String { get }
 
-    @available(iOS 14.0, macOS 12.0, *)
     var platformArchitecture: String { get }
 
     func jsonRepresentation() -> Data
@@ -58,4 +57,30 @@ public protocol CallStackTreeProtocol {
 
     var callStacks: [CallStack] { get }
     var callStackPerThread: Bool { get }
+}
+
+public extension CallStackTreeProtocol {
+    var binaryImages: [Binary] {
+        let frames = callStacks.flatMap({ $0.frames })
+
+        var uniquedBinaries = [UUID: Binary]()
+
+        // unique the binaries, and if we have multiple matches
+        // keep the ones with the largest (ie more accurate) sizes
+        for frame in frames {
+            guard let binary = frame.binary else { continue }
+            let uuid = binary.uuid
+
+            guard let existing = uniquedBinaries[uuid] else {
+                uniquedBinaries[uuid] = binary
+                continue
+            }
+
+            if existing.approximateSize < binary.approximateSize {
+                uniquedBinaries[uuid] = binary
+            }
+        }
+
+        return Array(uniquedBinaries.values)
+    }
 }
