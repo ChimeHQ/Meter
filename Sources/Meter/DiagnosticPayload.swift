@@ -107,6 +107,20 @@ public class CrashMetaData: MetaDataProtocol, Codable {
         self.signal = signal
     }
 
+    public init(diagnostic: CrashDiagnosticProtocol) {
+        self.deviceType = diagnostic.metaData.deviceType
+        self.applicationBuildVersion = diagnostic.metaData.applicationBuildVersion
+        self.applicationVersion = diagnostic.applicationVersion
+        self.osVersion = diagnostic.metaData.osVersion
+        self.platformArchitecture = diagnostic.metaData.platformArchitecture
+        self.regionFormat = diagnostic.metaData.regionFormat
+        self.virtualMemoryRegionInfo = diagnostic.virtualMemoryRegionInfo
+        self.exceptionType = diagnostic.exceptionType?.intValue
+        self.terminationReason = diagnostic.terminationReason
+        self.exceptionCode = diagnostic.exceptionCode?.intValue
+        self.signal = diagnostic.signal?.intValue
+    }
+
     public func jsonRepresentation() -> Data {
         return (try? JSONEncoder().encode(self)) ?? Data()
     }

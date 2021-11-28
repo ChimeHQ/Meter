@@ -7,7 +7,7 @@ Meter is a companion library to [MetricKit](https://developer.apple.com/document
 - API for `MXCallStackTree`
 - Types for `MXDiagnostic` emulation and coding
 - `MXMetricManager`-like interface for unsupported platforms
-- On-device symbolication (still under investigation)
+- On-device symbolication
 
 ## Integration
 
@@ -34,7 +34,7 @@ for frame in tree.callStacks[0].frames {
 
 ### MXMetricManager and Diagnostics Polyfill
 
-MetricKit's crash reporting facilities require iOS 14, and isn't supported at all for tvOS, watchOS, or macOS. You may want to start moving towards using it as a standard interface between your app and whatever system consumes the data. Meter offers an API that's very similar to MetricKit's `MXMetricManager` to help do just that.
+MetricKit's crash reporting facilities require iOS 14/macOS 12.0, and isn't supported at all for tvOS or watchOS. You may want to start moving towards using it as a standard interface between your app and whatever system consumes the data. Meter offers an API that's very similar to MetricKit's `MXMetricManager` to help do just that.
 
 ```swift
 // adding a subscriber
@@ -51,7 +51,7 @@ extension MyObject: MeterPayloadSubscriber {
 MeterPayloadManager.shared.deliver(payloads)
 ```
 
-This makes it easier to support the full capabilities of MetricKit when available, and gracefully degrade when they aren't. It can be nice to have a uniform interface to whatever backend system you are using to consume the reports. And, as you move towards an iOS 14 minimum, and as (hopefully) Apple starts supporting MetricKit on more platforms, it will be easier to pull out Meter altogether.
+This makes it easier to support the full capabilities of MetricKit when available, and gracefully degrade when they aren't. It can be nice to have a uniform interface to whatever backend system you are using to consume the reports. And, as you move towards a supported minimum, and as (hopefully) Apple starts supporting MetricKit on all platforms, it will be easier to pull out Meter altogether.
 
 Backwards compatibility is still up to you, though. One solution is [ImpactMeterAdapter](https://github.com/ChimeHQ/ImpactMeterAdapter), which uses [Impact](https://github.com/ChimeHQ/Impact) to collect crash data for OSes that don't support `MXCrashDiagnostic`.
 
@@ -59,9 +59,20 @@ If you're also looking for a way to transmit report data to your server, check o
 
 ### On-Device Symbolication
 
-The stack traces provided by MetricKit, like other types of crash logs, are not symbolicated. There are a bunch of different ways to tackle this problem, but one very convenient option is just to do it as a post-processing step on the device where the crash occurred. The `dlopen` family of APIs could be one approach. It has had some real limitions in the past, particularly on iOS. But, still worth a look.
+The stack traces provided by MetricKit, like other types of crash logs, are not symbolicated. There are a bunch of different ways to tackle this problem, but one very convenient option is just to do it as a post-processing step on the device where the crash occurred. This does come, however, with one major drawback. It only works when you still have access to the same binaries. OS updates will almost certainly change all the OS binaries. The same is true for an app update, though in that case, an off-line symbolication step using a dSYM is still doable.
 
-Right now, this functionality is still in the investigation phase. But, if you have thoughts, please get in touch!
+Meter provides an API for performing symbolication, via the `Symbolicator` protocol. The core of this protocol should be usable to symbolicate any address, and is not tied to MetricKit. But, the protocol also does include a number of convenience methods that can operate on the various MetricKit classes. The result uses the Meter's wrapper classes to return `Frame` instances which include a `symbolInfo` property. This property can be accessed directly or just re-encoded for transport.
+
+```swift
+let symbolicator = DlfcnSymbolicator()
+let symPayload = symbolicator.symbolicate(payload: diagnosticPayload)
+```
+
+#### DlfcnSymbolicator
+
+This class implements the `Symbolicator` protocol, and uses the functions with `dlfcn.h` to determine symbol/offset. This works, but does have some limitations. First, it relies on looking up symbols in the **currently executing** process, so it will only work if the needed binary is currently loaded. Second, these functions return `<redacted>` for some binary's symbols. I know the symbol information is still accessible from the binary, so it's unclear why this is done.
+
+This is a relatively inexpensive symbolication pass, and is a first effort. Further work here is definitely necessary.
 
 ### Suggestions or Feedback
 

@@ -10,11 +10,14 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        .target(name: "Meter", dependencies: []),
+        .target(name: "BinaryImage", dependencies: [], publicHeadersPath: ""),
+        .target(name: "Meter", dependencies: ["BinaryImage"]),
         .testTarget(name: "MeterTests",
                     dependencies: ["Meter"],
                     resources: [
                         .copy("Resources"),
                     ]),
+        .testTarget(name: "BinaryImageTests",
+                    dependencies: ["BinaryImage"]),
     ]
 )

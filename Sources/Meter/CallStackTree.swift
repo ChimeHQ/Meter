@@ -41,6 +41,8 @@ public struct Frame: Codable {
     public var address: Int
     public var subFrames: [Frame]?
 
+    public var symbolInfo: [SymbolInfo]?
+
     public init(binaryUUID: UUID? = nil, offsetIntoBinaryTextSegment: Int? = nil, sampleCount: Int? = nil, binaryName: String? = nil, address: Int, subFrames: [Frame]) {
         self.binaryUUID = binaryUUID
         self.offsetIntoBinaryTextSegment = offsetIntoBinaryTextSegment
@@ -48,6 +50,17 @@ public struct Frame: Codable {
         self.binaryName = binaryName
         self.address = address
         self.subFrames = subFrames
+        self.symbolInfo = nil
+    }
+
+    public init(frame: Frame, symbolInfo: [SymbolInfo], symbolicatedSubFrames: [Frame]?) {
+        self.binaryUUID = frame.binaryUUID
+        self.offsetIntoBinaryTextSegment = frame.offsetIntoBinaryTextSegment
+        self.sampleCount = frame.sampleCount
+        self.binaryName = frame.binaryName
+        self.address = frame.address
+        self.subFrames = symbolicatedSubFrames
+        self.symbolInfo = symbolInfo
     }
 
     public var flattenedFrames: [Frame] {
@@ -89,6 +102,19 @@ public struct Frame: Codable {
 extension Frame: Hashable {
 }
 
+public extension Frame {
+    var symbolicationTarget: SymbolicationTarget? {
+        guard
+            let uuid = binaryUUID,
+            let loadAddress = binaryLoadAddress
+        else {
+            return nil
+        }
+
+        return SymbolicationTarget(uuid: uuid, loadAddress: loadAddress, path: nil)
+    }
+}
+
 public class CallStack: NSObject, Codable {
     /// Indicates which thread caused the crash
     public var threadAttributed: Bool
@@ -120,7 +146,7 @@ public class CallStackTree: Codable {
 
     #if os(iOS) || os(macOS)
     @available(iOS 14.0, macOS 12.0, *)
-    static func from(callStackTree: MXCallStackTree) throws -> CallStackTreeProtocol {
+    public static func from(callStackTree: MXCallStackTree) throws -> CallStackTreeProtocol {
         let data = callStackTree.jsonRepresentation()
 
         return try from(data: data)
