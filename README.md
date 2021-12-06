@@ -70,7 +70,9 @@ let symPayload = symbolicator.symbolicate(payload: diagnosticPayload)
 
 #### DlfcnSymbolicator
 
-This class implements the `Symbolicator` protocol, and uses the functions with `dlfcn.h` to determine symbol/offset. This works, but does have some limitations. First, it relies on looking up symbols in the **currently executing** process, so it will only work if the needed binary is currently loaded. Second, these functions return `<redacted>` for some binary's symbols. I know the symbol information is still accessible from the binary, so it's unclear why this is done.
+This class implements the `Symbolicator` protocol, and uses the functions with `dlfcn.h` to determine symbol/offset. This works, but does have some limitations. First, it relies on looking up symbols in the **currently executing** process, so it will only work if the needed binary is currently loaded.
+
+Second, these functions return `<redacted>` for some binary's symbols on iOS. I know the symbol information is still accessible from the binary, so it's unclear why this is done.
 
 This is a relatively inexpensive symbolication pass, and is a first effort. Further work here is definitely necessary.
 
