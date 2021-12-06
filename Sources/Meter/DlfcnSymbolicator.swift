@@ -1,14 +1,8 @@
 import Foundation
 import BinaryImage
 
-public class DlfcnSymbolicator {
-    private var pathCache: [String : String]
-
-    public init() {
-        self.pathCache = [:]
-    }
-
-    private lazy var imageMap: [UUID: BinaryImage] = {
+extension BinaryImage {
+    static var imageMap: [UUID: BinaryImage] {
         var map: [UUID: BinaryImage] = [:]
 
         BinaryImageEnumerateLoadedImages { image, _ in
@@ -27,7 +21,14 @@ public class DlfcnSymbolicator {
         }
 
         return map
-    }()
+    }
+}
+
+public class DlfcnSymbolicator {
+    private lazy var imageMap: [UUID: BinaryImage] = BinaryImage.imageMap
+
+    public init() {
+    }
 }
 
 extension DlfcnSymbolicator: Symbolicator {

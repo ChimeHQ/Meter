@@ -21,6 +21,8 @@ final class SymbolicationTests: XCTestCase {
         // This is a fragile test, because it will only work when running
         // against 12.0 (21A344) on arm. I can think of a way to build a
         // more robust test, but it will take quite a bit of work.
+        try XCTSkipUnless(ProcessInfo.processInfo.operatingSystemVersionString == "Version 12.0 (Build 21A344)")
+
         let symbolicator = DlfcnSymbolicator()
         let target = try XCTUnwrap(SymbolicationTarget(uuid: "17550b77-d255-389a-b779-906af75314b6",
                             loadAddress: 0x19d0c4000,
