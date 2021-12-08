@@ -1,20 +1,14 @@
-//
-//  DiagnosticTests.swift
-//  MeterTests
-//
-//  Created by Matt Massicotte on 2020-10-10.
-//
-
 import XCTest
 @testable import Meter
 
 class DiagnosticTests: XCTestCase {
-    func testReadingSimulatedData() throws {
+    func testReadingSimulatedCrashDiagnosticsData() throws {
         let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
         let data = try Data(contentsOf: url, options: [])
 
         let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
 
+        XCTAssertEqual(payload.crashDiagnostics?.count, 1)
         let crashDiagnostic = try XCTUnwrap(payload.crashDiagnostics?[0])
 
         XCTAssertEqual(crashDiagnostic.metaData.applicationBuildVersion, "1")
@@ -37,7 +31,7 @@ class DiagnosticTests: XCTestCase {
 
         let callStack = tree.callStacks[0]
 
-        XCTAssertTrue(callStack.threadAttributed)
+        XCTAssertTrue(callStack.threadAttributed == true)
         XCTAssertEqual(callStack.rootFrames.count, 1)
 
         let frame = callStack.rootFrames[0]
@@ -48,6 +42,40 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(frame.binaryName, "testBinaryName")
         XCTAssertEqual(frame.address, 74565)
         XCTAssertEqual(frame.binaryLoadAddress, 123)
+    }
+
+    func testReadingSimulatedHangDiagnosticsData() throws {
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
+        let data = try Data(contentsOf: url, options: [])
+
+        let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
+
+        XCTAssertEqual(payload.hangDiagnostics?.count, 1)
+        let diagnostic = try XCTUnwrap(payload.hangDiagnostics?[0])
+
+        XCTAssertEqual(diagnostic.metaData.applicationBuildVersion, "1")
+    }
+
+    func testReadingSimulatedCPUExceptionDiagnosticsData() throws {
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
+        let data = try Data(contentsOf: url, options: [])
+
+        let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
+
+        XCTAssertEqual(payload.cpuExceptionDiagnostics?.count, 1)
+        let diagnostic = try XCTUnwrap(payload.cpuExceptionDiagnostics?[0])
+
+        XCTAssertEqual(diagnostic.metaData.applicationBuildVersion, "1")
+
+        let tree = diagnostic.callStackTree
+
+        XCTAssertFalse(tree.callStackPerThread)
+        XCTAssertEqual(tree.callStacks.count, 1);
+
+        let callStack = tree.callStacks[0]
+
+        XCTAssertNil(callStack.threadAttributed)
+        XCTAssertEqual(callStack.rootFrames.count, 1)
     }
 
     func testRealPayloadWithSubframes() throws {
@@ -66,7 +94,7 @@ class DiagnosticTests: XCTestCase {
 
         let callStack = tree.callStacks[0]
 
-        XCTAssertTrue(callStack.threadAttributed)
+        XCTAssertTrue(callStack.threadAttributed == true)
         XCTAssertEqual(callStack.rootFrames.count, 1)
         XCTAssertEqual(callStack.rootFrames[0].subFrames?.count, 1)
 

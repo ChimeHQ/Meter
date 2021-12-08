@@ -73,7 +73,7 @@ public extension Symbolicator {
 
     func symbolicate(callStack: CallStack) -> CallStack {
         let symFrames = callStack.rootFrames.map({ symbolicate(frame: $0) })
-        let attributed = callStack.threadAttributed
+        let attributed = callStack.threadAttributed ?? false
 
         return CallStack(threadAttributed: attributed, rootFrames: symFrames)
     }
@@ -93,12 +93,42 @@ public extension Symbolicator {
         return CrashDiagnostic(metaData: metadata, callStackTree: symTree)
     }
 
+    func symbolicate(diagnostic: HangDiagnostic) -> HangDiagnostic {
+        let metadata = HangMetaData(diagnostic: diagnostic)
+
+        let symTree = symbolicate(tree: diagnostic.callStackTree)
+
+        return HangDiagnostic(metaData: metadata, callStackTree: symTree)
+    }
+
+    func symbolicate(diagnostic: DiskWriteExceptionDiagnostic) -> DiskWriteExceptionDiagnostic {
+        let metadata = DiskWriteExceptionMetaData(diagnostic: diagnostic)
+
+        let symTree = symbolicate(tree: diagnostic.callStackTree)
+
+        return DiskWriteExceptionDiagnostic(metaData: metadata, callStackTree: symTree)
+    }
+
+    func symbolicate(diagnostic: CPUExceptionDiagnostic) -> CPUExceptionDiagnostic {
+        let metadata = CPUExceptionMetaData(diagnostic: diagnostic)
+
+        let symTree = symbolicate(tree: diagnostic.callStackTree)
+
+        return CPUExceptionDiagnostic(metaData: metadata, callStackTree: symTree)
+    }
+
     func symbolicate(payload: DiagnosticPayloadProtocol) -> DiagnosticPayload {
-        let symDiagnostics = payload.crashDiagnostics?.map({ symbolicate(diagnostic: $0) })
+        let symCrashDiagnostics = payload.crashDiagnostics?.map({ symbolicate(diagnostic: $0) })
+        let symHangDiagnostics = payload.hangDiagnostics?.map({ symbolicate(diagnostic: $0) })
+        let symCPUDiagnostics = payload.cpuExceptionDiagnostics?.map({ symbolicate(diagnostic: $0) })
+        let diskWriteDiagnostics = payload.diskWriteExceptionDiagnostics?.map({ symbolicate(diagnostic: $0) })
 
         return DiagnosticPayload(timeStampBegin: payload.timeStampBegin,
                                  timeStampEnd: payload.timeStampEnd,
-                                 crashDiagnostics: symDiagnostics)
+                                 crashDiagnostics: symCrashDiagnostics,
+                                 hangDiagnostics: symHangDiagnostics,
+                                 cpuExceptionDiagnostics: symCPUDiagnostics,
+                                 diskWriteExceptionDiagnostics: diskWriteDiagnostics)
     }
 }
 

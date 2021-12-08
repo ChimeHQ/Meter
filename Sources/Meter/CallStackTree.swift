@@ -117,7 +117,7 @@ public extension Frame {
 
 public class CallStack: NSObject, Codable {
     /// Indicates which thread caused the crash
-    public var threadAttributed: Bool
+    public var threadAttributed: Bool?
     public var rootFrames: [Frame]
 
     enum CodingKeys: String, CodingKey {

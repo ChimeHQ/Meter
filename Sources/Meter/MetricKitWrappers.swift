@@ -32,6 +32,25 @@ public class MXDiagnosticPayloadWrapper: DiagnosticPayloadProtocol {
     public lazy var crashDiagnostics: [CrashDiagnosticProtocol]? = {
         return payload.crashDiagnostics?.map({ MXCrashDiagnosticDiagnosticWrapper(diagnostic: $0) })
     }()
+
+    public lazy var hangDiagnostics: [HangDiagnostic]? = {
+        return payload.hangDiagnostics?
+            .map({ $0.jsonRepresentation() })
+            .compactMap({ try? JSONDecoder().decode(HangDiagnostic.self, from: $0) })
+    }()
+
+    public lazy var cpuExceptionDiagnostics: [CPUExceptionDiagnostic]? = {
+        return payload.cpuExceptionDiagnostics?
+            .map({ $0.jsonRepresentation() })
+            .compactMap({ try? JSONDecoder().decode(CPUExceptionDiagnostic.self, from: $0) })
+    }()
+
+    public lazy var diskWriteExceptionDiagnostics: [DiskWriteExceptionDiagnostic]? = {
+        return payload.diskWriteExceptionDiagnostics?
+            .map({ $0.jsonRepresentation() })
+            .compactMap({ try? JSONDecoder().decode(DiskWriteExceptionDiagnostic.self, from: $0) })
+    }()
+
 }
 
 @available(iOS 14.0, macOS 12.0, *)

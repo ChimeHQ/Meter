@@ -46,7 +46,12 @@ class PayloadProviderTests: XCTestCase {
         let simulatedCrash = CrashDiagnostic(metaData: metaData,
                                              callStackTree: CallStackTree(callStacks: [], callStackPerThread: true))
 
-        let simulatedPayloads = [DiagnosticPayload(timeStampBegin: Date(), timeStampEnd: Date(), crashDiagnostics: [simulatedCrash])]
+        let simulatedPayloads = [DiagnosticPayload(timeStampBegin: Date(),
+                                                   timeStampEnd: Date(),
+                                                   crashDiagnostics: [simulatedCrash],
+                                                   hangDiagnostics: nil,
+                                                   cpuExceptionDiagnostics: nil,
+                                                   diskWriteExceptionDiagnostics: nil)]
 
         provider.deliver(simulatedPayloads)
 

@@ -73,4 +73,23 @@ final class SymbolicationTests: XCTestCase {
         XCTAssertEqual(symbolicatedStack.rootFrames[0].subFrames?[0].symbolInfo?[0].symbol, "symbolB")
         XCTAssertEqual(symbolicatedStack.rootFrames[0].subFrames?[0].symbolInfo?[0].offset, 10)
     }
+
+    func testSymbolicatesAllDiagnosticTypes() throws {
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
+        let data = try Data(contentsOf: url, options: [])
+        let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
+
+        let symbolInfo = SymbolInfo(symbol: "symSymbol", offset: 10)
+
+        var mockSymbolicator = MockSymbolicator()
+
+        mockSymbolicator.mockResults[74565] = [symbolInfo]
+
+        let symPayload = mockSymbolicator.symbolicate(payload: payload)
+
+        XCTAssertEqual(symPayload.crashDiagnostics?[0].callStackTree.callStacks[0].rootFrames[0].symbolInfo, [symbolInfo])
+        XCTAssertEqual(symPayload.hangDiagnostics?[0].callStackTree.callStacks[0].rootFrames[0].symbolInfo, [symbolInfo])
+        XCTAssertEqual(symPayload.cpuExceptionDiagnostics?[0].callStackTree.callStacks[0].rootFrames[0].symbolInfo, [symbolInfo])
+        XCTAssertEqual(symPayload.diskWriteExceptionDiagnostics?[0].callStackTree.callStacks[0].rootFrames[0].symbolInfo, [symbolInfo])
+    }
 }

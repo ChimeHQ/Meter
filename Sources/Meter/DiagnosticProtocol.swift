@@ -17,6 +17,9 @@ public protocol DiagnosticPayloadProtocol {
     var timeStampEnd: Date { get }
 
     var crashDiagnostics: [CrashDiagnosticProtocol]? { get }
+    var hangDiagnostics: [HangDiagnostic]? { get }
+    var cpuExceptionDiagnostics: [CPUExceptionDiagnostic]? { get }
+    var diskWriteExceptionDiagnostics: [DiskWriteExceptionDiagnostic]? { get }
 }
 
 public extension DiagnosticPayloadProtocol {
