@@ -57,7 +57,7 @@ NSUUID* BinaryuImageUUIDFromLoadCommand(const struct load_command* lcmd, uint32_
     return [[NSUUID alloc] initWithUUIDBytes:bytes];
 }
 
-bool ImpactBinaryImageGetData(const MachOHeader* header, const char* path, MachOData* data) {
+bool BinaryImageGetData(const MachOHeader* header, const char* path, MachOData* data) {
     if (header == NULL || data == NULL) {
         return false;
     }
