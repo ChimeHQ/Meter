@@ -68,7 +68,7 @@ public extension Symbolicator {
         let addr = frame.address
         let info = frame.symbolicationTarget.map({ symbolicate(address: addr, in: $0) }) ?? []
 
-        return Frame(frame: frame, symbolInfo: info, symbolicatedSubFrames: symSubframes)
+        return Frame(frame: frame, symbolInfo: info, subFrames: symSubframes)
     }
 
     func symbolicate(callStack: CallStack) -> CallStack {

@@ -134,10 +134,24 @@ public class CrashDiagnostic: Codable {
     private let internalMetaData: CrashMetaData
     private let internalCallStackTree: CallStackTree
 
+    /// Per-binary crash-related information
+    ///
+    /// This is available only for convenience when encoding. The value
+    /// must be set externally.
+    public var applicationSpecificInformation: [String: [String]]?
+
+    /// Backtraces that are available only within the crashing process
+    ///
+    /// This is available only for convenience when encoding. The value
+    /// must be set externally.
+    public var exceptionInfo: ExceptionInfo?
+
     enum CodingKeys: String, CodingKey {
         case version
         case internalMetaData = "diagnosticMetaData"
         case internalCallStackTree = "callStackTree"
+        case applicationSpecificInformation
+        case exceptionInfo
     }
 
     public init(metaData: CrashMetaData, callStackTree: CallStackTree) {

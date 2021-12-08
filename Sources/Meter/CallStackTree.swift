@@ -43,7 +43,7 @@ public struct Frame: Codable {
 
     public var symbolInfo: [SymbolInfo]?
 
-    public init(binaryUUID: UUID? = nil, offsetIntoBinaryTextSegment: Int? = nil, sampleCount: Int? = nil, binaryName: String? = nil, address: Int, subFrames: [Frame]) {
+    public init(binaryUUID: UUID? = nil, offsetIntoBinaryTextSegment: Int? = nil, sampleCount: Int? = nil, binaryName: String? = nil, address: Int, subFrames: [Frame]?, symbolInfo: [SymbolInfo]? = nil) {
         self.binaryUUID = binaryUUID
         self.offsetIntoBinaryTextSegment = offsetIntoBinaryTextSegment
         self.sampleCount = sampleCount
@@ -53,13 +53,13 @@ public struct Frame: Codable {
         self.symbolInfo = nil
     }
 
-    public init(frame: Frame, symbolInfo: [SymbolInfo], symbolicatedSubFrames: [Frame]?) {
+    init(frame: Frame, symbolInfo: [SymbolInfo], subFrames: [Frame]?) {
         self.binaryUUID = frame.binaryUUID
         self.offsetIntoBinaryTextSegment = frame.offsetIntoBinaryTextSegment
         self.sampleCount = frame.sampleCount
         self.binaryName = frame.binaryName
         self.address = frame.address
-        self.subFrames = symbolicatedSubFrames
+        self.subFrames = subFrames
         self.symbolInfo = symbolInfo
     }
 
