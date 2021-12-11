@@ -41,7 +41,6 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(frame.sampleCount, 20)
         XCTAssertEqual(frame.binaryName, "testBinaryName")
         XCTAssertEqual(frame.address, 74565)
-        XCTAssertEqual(frame.binaryLoadAddress, 123)
     }
 
     func testReadingSimulatedHangDiagnosticsData() throws {
@@ -54,6 +53,21 @@ class DiagnosticTests: XCTestCase {
         let diagnostic = try XCTUnwrap(payload.hangDiagnostics?[0])
 
         XCTAssertEqual(diagnostic.metaData.applicationBuildVersion, "1")
+
+        let tree = diagnostic.callStackTree
+
+        XCTAssertTrue(tree.callStackPerThread)
+        XCTAssertEqual(tree.callStacks.count, 1);
+
+        let callStack = tree.callStacks[0]
+
+        XCTAssertTrue(callStack.threadAttributed == true)
+        XCTAssertEqual(callStack.rootFrames.count, 1)
+
+        let frame = callStack.rootFrames[0]
+
+        XCTAssertEqual(frame.offsetIntoBinaryTextSegment, 123)
+        XCTAssertEqual(frame.address, 74565)
     }
 
     func testReadingSimulatedCPUExceptionDiagnosticsData() throws {
@@ -125,8 +139,5 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(frames[31].sampleCount, 1)
         XCTAssertEqual(frames[31].binaryName, "libdyld.dylib")
         XCTAssertEqual(frames[31].address, 6795285912)
-
-        XCTAssertEqual(frames[31].binaryLoadAddress, 6795280384)
-        XCTAssertEqual(frames[31].approximateBinarySize, 5529)
     }
 }

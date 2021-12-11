@@ -25,7 +25,7 @@ public struct Binary: Codable, Hashable {
 
     public init?(uuid: String, loadAddress: Int, approximateSize: Int, name: String?) {
         guard let value = UUID(uuidString: uuid) else { return nil }
-        
+
         self.uuid = value
         self.loadAddress = loadAddress
         self.approximateSize = approximateSize
@@ -33,14 +33,13 @@ public struct Binary: Codable, Hashable {
     }
 }
 
-public struct Frame: Codable {
+public struct Frame: Codable, Hashable {
     public var binaryUUID: UUID?
     public var offsetIntoBinaryTextSegment: Int?
     public var sampleCount: Int?
     public var binaryName: String?
     public var address: Int
     public var subFrames: [Frame]?
-
     public var symbolInfo: [SymbolInfo]?
 
     public init(binaryUUID: UUID? = nil, offsetIntoBinaryTextSegment: Int? = nil, sampleCount: Int? = nil, binaryName: String? = nil, address: Int, subFrames: [Frame]?, symbolInfo: [SymbolInfo]? = nil) {
@@ -67,51 +66,21 @@ public struct Frame: Codable {
         return subFrames?.flatMap({ [$0] + $0.flattenedFrames }) ?? []
     }
 
-    public var binaryLoadAddress: Int? {
-        return offsetIntoBinaryTextSegment
-    }
-
-    public var approximateBinarySize: Int? {
-        guard let loadAddress = binaryLoadAddress else {
-            return nil
-        }
-
-        if loadAddress > address {
-            return nil
-        }
-
-        return address - loadAddress + 1
-    }
-
-    public var binary: Binary? {
+    public func binary(withOffsetAsLoadAddress: Bool) -> Binary? {
         guard
             let uuid = binaryUUID,
-            let loadAddress = binaryLoadAddress,
-            let size = approximateBinarySize
+            let offset = offsetIntoBinaryTextSegment
         else {
             return nil
         }
+
+        let loadAddress = withOffsetAsLoadAddress ? offset : address - offset
+        let size = address - loadAddress + 1
 
         return Binary(uuid: uuid,
                       loadAddress: loadAddress,
                       approximateSize: size,
                       name: binaryName)
-    }
-}
-
-extension Frame: Hashable {
-}
-
-public extension Frame {
-    var symbolicationTarget: SymbolicationTarget? {
-        guard
-            let uuid = binaryUUID,
-            let loadAddress = binaryLoadAddress
-        else {
-            return nil
-        }
-
-        return SymbolicationTarget(uuid: uuid, loadAddress: loadAddress, path: nil)
     }
 }
 
@@ -164,31 +133,5 @@ public class CallStackTree: Codable {
         } catch {
             return Data()
         }
-    }
-}
-
-extension CallStackTree {
-    var binaryImages: [Binary] {
-        let frames = callStacks.flatMap({ $0.frames })
-
-        var uniquedBinaries = [UUID: Binary]()
-
-        // unique the binaries, and if we have multiple matches
-        // keep the ones with the largest (ie more accurate) sizes
-        for frame in frames {
-            guard let binary = frame.binary else { continue }
-            let uuid = binary.uuid
-
-            guard let existing = uniquedBinaries[uuid] else {
-                uniquedBinaries[uuid] = binary
-                continue
-            }
-
-            if existing.approximateSize < binary.approximateSize {
-                uniquedBinaries[uuid] = binary
-            }
-        }
-
-        return Array(uniquedBinaries.values)
     }
 }

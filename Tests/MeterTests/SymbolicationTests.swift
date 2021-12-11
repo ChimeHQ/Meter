@@ -37,6 +37,23 @@ final class SymbolicationTests: XCTestCase {
         XCTAssertNil(infoArray[0].file)
     }
 
+    func testTargetCalculation() throws {
+        let uuid = UUID()
+        let frame = Frame(binaryUUID: uuid,
+                          offsetIntoBinaryTextSegment: 100,
+                          binaryName: "binary",
+                          address: 105,
+                          subFrames: nil)
+
+        let loadTarget = frame.symbolicationTarget(withOffsetAsLoadAddress: true)
+
+        XCTAssertEqual(loadTarget, SymbolicationTarget(uuid: uuid, loadAddress: 100, path: "binary"))
+
+        let offsetTarget = frame.symbolicationTarget(withOffsetAsLoadAddress: false)
+
+        XCTAssertEqual(offsetTarget, SymbolicationTarget(uuid: uuid, loadAddress: 5, path: "binary"))
+    }
+    
     func testSymbolicateCallStack() throws {
         let uuidB = UUID()
         let frameB = Frame(binaryUUID: uuidB,
@@ -61,7 +78,7 @@ final class SymbolicationTests: XCTestCase {
         mockSymbolicator.mockResults[frameB.address] = [symbolInfoB]
         mockSymbolicator.mockResults[frameA.address] = [symbolInfoA]
 
-        let symbolicatedStack = mockSymbolicator.symbolicate(callStack: callStack)
+        let symbolicatedStack = mockSymbolicator.symbolicate(callStack: callStack, withOffsetAsLoadAddress: true)
 
         XCTAssertEqual(symbolicatedStack.threadAttributed, true)
         XCTAssertEqual(symbolicatedStack.rootFrames.count, 1)

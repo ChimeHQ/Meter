@@ -36,7 +36,7 @@ extension SymbolInfo: CustomDebugStringConvertible {
     }
 }
 
-public struct SymbolicationTarget {
+public struct SymbolicationTarget: Hashable {
     public var uuid: UUID
     public var loadAddress: Int
     public var path: String?
@@ -60,26 +60,35 @@ public protocol Symbolicator {
     func symbolicate(address: Int, in target: SymbolicationTarget) -> [SymbolInfo]
 }
 
+public extension Frame {
+    func symbolicationTarget(withOffsetAsLoadAddress: Bool) -> SymbolicationTarget? {
+        let binary = binary(withOffsetAsLoadAddress: withOffsetAsLoadAddress)
+
+        return binary.map({ SymbolicationTarget(uuid: $0.uuid, loadAddress: $0.loadAddress, path: $0.name) })
+    }
+}
+
 public extension Symbolicator {
-    func symbolicate(frame: Frame) -> Frame {
+    func symbolicate(frame: Frame, withOffsetAsLoadAddress: Bool) -> Frame {
         let subframes = frame.subFrames ?? []
-        let symSubframes = subframes.map({ symbolicate(frame: $0) })
+        let symSubframes = subframes.map({ symbolicate(frame: $0, withOffsetAsLoadAddress: withOffsetAsLoadAddress) })
 
         let addr = frame.address
-        let info = frame.symbolicationTarget.map({ symbolicate(address: addr, in: $0) }) ?? []
+        let target = frame.symbolicationTarget(withOffsetAsLoadAddress: withOffsetAsLoadAddress)
+        let info = target.map({ symbolicate(address: addr, in: $0) }) ?? []
 
         return Frame(frame: frame, symbolInfo: info, subFrames: symSubframes)
     }
 
-    func symbolicate(callStack: CallStack) -> CallStack {
-        let symFrames = callStack.rootFrames.map({ symbolicate(frame: $0) })
+    func symbolicate(callStack: CallStack, withOffsetAsLoadAddress: Bool) -> CallStack {
+        let symFrames = callStack.rootFrames.map({ symbolicate(frame: $0, withOffsetAsLoadAddress: withOffsetAsLoadAddress) })
         let attributed = callStack.threadAttributed ?? false
 
         return CallStack(threadAttributed: attributed, rootFrames: symFrames)
     }
 
-    func symbolicate(tree: CallStackTree) -> CallStackTree {
-        let stacks = tree.callStacks.map({ symbolicate(callStack: $0) })
+    func symbolicate(tree: CallStackTree, withOffsetAsLoadAddress: Bool) -> CallStackTree {
+        let stacks = tree.callStacks.map({ symbolicate(callStack: $0, withOffsetAsLoadAddress: withOffsetAsLoadAddress) })
 
         return CallStackTree(callStacks: stacks,
                              callStackPerThread: tree.callStackPerThread)
@@ -88,7 +97,7 @@ public extension Symbolicator {
     func symbolicate(diagnostic: CrashDiagnostic) -> CrashDiagnostic {
         let metadata = CrashMetaData(diagnostic: diagnostic)
 
-        let symTree = symbolicate(tree: diagnostic.callStackTree)
+        let symTree = symbolicate(tree: diagnostic.callStackTree, withOffsetAsLoadAddress: true)
 
         return CrashDiagnostic(metaData: metadata, callStackTree: symTree)
     }
@@ -96,7 +105,7 @@ public extension Symbolicator {
     func symbolicate(diagnostic: HangDiagnostic) -> HangDiagnostic {
         let metadata = HangMetaData(diagnostic: diagnostic)
 
-        let symTree = symbolicate(tree: diagnostic.callStackTree)
+        let symTree = symbolicate(tree: diagnostic.callStackTree, withOffsetAsLoadAddress: false)
 
         return HangDiagnostic(metaData: metadata, callStackTree: symTree)
     }
@@ -104,7 +113,7 @@ public extension Symbolicator {
     func symbolicate(diagnostic: DiskWriteExceptionDiagnostic) -> DiskWriteExceptionDiagnostic {
         let metadata = DiskWriteExceptionMetaData(diagnostic: diagnostic)
 
-        let symTree = symbolicate(tree: diagnostic.callStackTree)
+        let symTree = symbolicate(tree: diagnostic.callStackTree, withOffsetAsLoadAddress: false)
 
         return DiskWriteExceptionDiagnostic(metaData: metadata, callStackTree: symTree)
     }
@@ -112,7 +121,7 @@ public extension Symbolicator {
     func symbolicate(diagnostic: CPUExceptionDiagnostic) -> CPUExceptionDiagnostic {
         let metadata = CPUExceptionMetaData(diagnostic: diagnostic)
 
-        let symTree = symbolicate(tree: diagnostic.callStackTree)
+        let symTree = symbolicate(tree: diagnostic.callStackTree, withOffsetAsLoadAddress: false)
 
         return CPUExceptionDiagnostic(metaData: metadata, callStackTree: symTree)
     }
@@ -129,41 +138,5 @@ public extension Symbolicator {
                                  hangDiagnostics: symHangDiagnostics,
                                  cpuExceptionDiagnostics: symCPUDiagnostics,
                                  diskWriteExceptionDiagnostics: diskWriteDiagnostics)
-    }
-}
-
-extension Symbolicator {
-    
-}
-
-extension Symbolicator {
-    func lookupPath(for binary: Binary) -> String? {
-        guard let name = binary.name else {
-            return nil
-        }
-
-        let manager = FileManager.default
-
-        switch name {
-        case "dyld", "libdyld.dylib":
-            return "/usr/lib/" + name
-        case "libsystem_kernel.dylib", "libsystem_pthread.dylib", "libdispatch.dylib":
-            return "/usr/lib/system/" + name
-        default:
-            break
-        }
-
-        // /usr/lib/?
-        let usrLibPath = "/usr/lib/" + name
-        if manager.isReadableFile(atPath: usrLibPath) {
-            return usrLibPath
-        }
-
-        let usrLibSystem = "/usr/lib/system/" + name
-        if manager.isReadableFile(atPath: usrLibSystem) {
-            return usrLibSystem
-        }
-
-        return nil
     }
 }
