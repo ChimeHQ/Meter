@@ -9,9 +9,9 @@ import XCTest
 @testable import Meter
 
 class Subscriber: MeterPayloadSubscriber {
-    var onReceiveHandler: (([DiagnosticPayloadProtocol]) -> Void)?
+    var onReceiveHandler: (([DiagnosticPayload]) -> Void)?
 
-    func didReceive(_ payloads: [DiagnosticPayloadProtocol]) {
+    func didReceive(_ payloads: [DiagnosticPayload]) {
         onReceiveHandler?(payloads)
     }
 }
@@ -24,7 +24,7 @@ class PayloadProviderTests: XCTestCase {
         provider.add(subscriber)
 
         let expectation = XCTestExpectation(description: "payload delivery")
-        var receivedPayloads: [DiagnosticPayloadProtocol]?
+        var receivedPayloads: [DiagnosticPayload]?
 
         subscriber.onReceiveHandler = { (payloads) in
             receivedPayloads = payloads

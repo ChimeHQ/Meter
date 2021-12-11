@@ -78,14 +78,14 @@ public extension Symbolicator {
         return CallStack(threadAttributed: attributed, rootFrames: symFrames)
     }
 
-    func symbolicate(tree: CallStackTreeProtocol) -> CallStackTree {
+    func symbolicate(tree: CallStackTree) -> CallStackTree {
         let stacks = tree.callStacks.map({ symbolicate(callStack: $0) })
 
         return CallStackTree(callStacks: stacks,
                              callStackPerThread: tree.callStackPerThread)
     }
 
-    func symbolicate(diagnostic: CrashDiagnosticProtocol) -> CrashDiagnostic {
+    func symbolicate(diagnostic: CrashDiagnostic) -> CrashDiagnostic {
         let metadata = CrashMetaData(diagnostic: diagnostic)
 
         let symTree = symbolicate(tree: diagnostic.callStackTree)
@@ -117,7 +117,7 @@ public extension Symbolicator {
         return CPUExceptionDiagnostic(metaData: metadata, callStackTree: symTree)
     }
 
-    func symbolicate(payload: DiagnosticPayloadProtocol) -> DiagnosticPayload {
+    func symbolicate(payload: DiagnosticPayload) -> DiagnosticPayload {
         let symCrashDiagnostics = payload.crashDiagnostics?.map({ symbolicate(diagnostic: $0) })
         let symHangDiagnostics = payload.hangDiagnostics?.map({ symbolicate(diagnostic: $0) })
         let symCPUDiagnostics = payload.cpuExceptionDiagnostics?.map({ symbolicate(diagnostic: $0) })

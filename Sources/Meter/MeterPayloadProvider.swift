@@ -12,7 +12,7 @@ import MetricKit
 #endif
 
 public protocol MeterPayloadSubscriber: AnyObject {
-    func didReceive(_ payloads: [DiagnosticPayloadProtocol])
+    func didReceive(_ payloads: [DiagnosticPayload])
 }
 
 public class MeterPayloadManager: NSObject {
@@ -73,7 +73,7 @@ public class MeterPayloadManager: NSObject {
 }
 
 extension MeterPayloadManager {
-    public func deliver(_ payloads: [DiagnosticPayloadProtocol]) {
+    public func deliver(_ payloads: [DiagnosticPayload]) {
         if payloads.isEmpty {
             os_log("Asked to deliver an empty payload array", log: self.logger, type: .fault)
             return
@@ -105,10 +105,19 @@ extension MeterPayloadManager: MXMetricManagerSubscriber {
     @available(iOS 14.0, macOS 12.0, *)
     public func didReceive(_ payloads: [MXDiagnosticPayload]) {
         guard deliverMetricKitDiagnostics else { return }
-        
-        let payloads = payloads.map({ MXDiagnosticPayloadWrapper(payload: $0) })
 
-        deliver(payloads)
+        let internalPayloads = payloads
+            .compactMap { payload -> DiagnosticPayload? in
+                do {
+                    return try DiagnosticPayload.from(payload: payload)
+                } catch {
+                    os_log("Failed to encode payload", log: self.logger, type: .error, String(describing: error))
+                }
+
+                return nil
+            }
+
+        deliver(internalPayloads)
     }
 }
 #endif
