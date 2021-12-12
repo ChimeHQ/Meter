@@ -64,6 +64,9 @@ uint8_t* _Nullable BinaryImageGetUUIDBytesFromLoadCommand(const struct load_comm
 
 #if __OBJC__
 NSUUID* _Nullable BinaryuImageUUIDFromLoadCommand(const struct load_command* lcmd, uint32_t cmdCode);
+NSUUID* BinaryImageGetUUID(const MachOHeader* header);
+
+void LogException(NSException* exception, NSString* path);
 #endif
 
 ASSUME_NONNULL_END

@@ -1,0 +1,33 @@
+1 {"type":"objc","name":"c29tZXRoaW5n","reason":"a2Fib29t","time_ms":1646487651000}
+2 {"pc":7268352440}
+2 {"pc":7265540024}
+2 {"pc":7268527652}
+2 {"pc":4309232304}
+2 {"pc":4309232612}
+2 {"pc":7315379200}
+2 {"pc":7315378688}
+2 {"pc":7315378440}
+2 {"pc":7315378172}
+2 {"pc":7315377960}
+2 {"pc":7315365224}
+2 {"pc":7315363460}
+2 {"pc":7315363064}
+2 {"pc":7315359584}
+2 {"pc":7315352500}
+2 {"pc":7314776068}
+2 {"pc":7314773004}
+2 {"pc":7314768752}
+2 {"pc":7317622800}
+2 {"pc":7313201628}
+2 {"pc":7313010824}
+2 {"pc":4309233164}
+2 {"pc":4309233108}
+2 {"pc":4309233384}
+2 {"pc":4313256180}
+3 {"address":7267287040, "uuid":"16FADF8B-A3AF-3E0C-B5FB-CE9A9CDC8747", "path":"/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"}
+3 {"address":7265443840, "uuid":"2EB32E1D-90CB-3256-8681-9034085A06A6", "path":"/usr/lib/libobjc.A.dylib"}
+3 {"address":7267287040, "uuid":"16FADF8B-A3AF-3E0C-B5FB-CE9A9CDC8747", "path":"/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"}
+3 {"address":4309204992, "uuid":"EED71F69-9B36-34C0-97D2-ACA3784A7FB8", "path":"/Users/USER/Library/Developer/Xcode/DerivedData/MetricKitTest-cqwuvojqzcbwndfiobiaxddtbmzd/Build/Products/Debug/MetricKitTest.app/Contents/MacOS/MetricKitTest"}
+3 {"address":7312994304, "uuid":"1B65B629-6D3B-3FCD-AD43-E5683A9F94B7", "path":"/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit"}
+3 {"address":4309204992, "uuid":"EED71F69-9B36-34C0-97D2-ACA3784A7FB8", "path":"/Users/USER/Library/Developer/Xcode/DerivedData/MetricKitTest-cqwuvojqzcbwndfiobiaxddtbmzd/Build/Products/Debug/MetricKitTest.app/Contents/MacOS/MetricKitTest"}
+

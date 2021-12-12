@@ -31,6 +31,14 @@ public struct Binary: Codable, Hashable {
         self.approximateSize = approximateSize
         self.name = name
     }
+
+    public var addressRange: Range<Int> {
+        return loadAddress..<approximateSize
+    }
+
+    func contains(_ address: Int) -> Bool {
+        return addressRange.contains(address)
+    }
 }
 
 public struct Frame: Codable, Hashable {
@@ -49,7 +57,7 @@ public struct Frame: Codable, Hashable {
         self.binaryName = binaryName
         self.address = address
         self.subFrames = subFrames
-        self.symbolInfo = nil
+        self.symbolInfo = symbolInfo
     }
 
     init(frame: Frame, symbolInfo: [SymbolInfo], subFrames: [Frame]?) {

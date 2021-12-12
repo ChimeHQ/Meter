@@ -4,7 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "Meter",
-    platforms: [.macOS(.v10_13), .iOS(.v12), .tvOS(.v12)],
+    platforms: [.macOS(.v10_13), .iOS(.v12), .tvOS(.v12), .watchOS(.v3)],
     products: [
         .library(name: "Meter", targets: ["Meter"]),
     ],
@@ -12,6 +12,7 @@ let package = Package(
     targets: [
         .target(name: "BinaryImage", dependencies: [], publicHeadersPath: ""),
         .target(name: "Meter", dependencies: ["BinaryImage"]),
+        .target(name: "MeterReporter", dependencies: ["Meter"]),
         .testTarget(name: "MeterTests",
                     dependencies: ["Meter"],
                     resources: [
