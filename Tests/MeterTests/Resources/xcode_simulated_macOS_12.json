@@ -1,0 +1,135 @@
+{
+  "crashDiagnostics" : [
+    {
+      "version" : "1.0.0",
+      "callStackTree" : {
+        "callStacks" : [
+          {
+            "threadAttributed" : true,
+            "callStackRootFrames" : [
+              {
+                "binaryUUID" : "3AAA2D7B-FA6A-43EE-BCD3-0CB87D7AD39A",
+                "offsetIntoBinaryTextSegment" : 123,
+                "sampleCount" : 20,
+                "binaryName" : "testBinaryName",
+                "address" : 74565
+              }
+            ]
+          }
+        ],
+        "callStackPerThread" : true
+      },
+      "diagnosticMetaData" : {
+        "platformArchitecture" : "arm64e",
+        "terminationReason" : "Namespace SIGNAL, Code 0xb",
+        "exceptionType" : 1,
+        "appBuildVersion" : "",
+        "osVersion" : "macOS 12.2 (21D49)",
+        "bundleIdentifier" : "com.chimehq.MetricKitTest",
+        "deviceType" : "MacBookPro18,3",
+        "exceptionCode" : 0,
+        "virtualMemoryRegionInfo" : "0 is not in any region.  Bytes before following region: 4000000000 REGION TYPE                      START - END             [ VSIZE] PRT\/MAX SHRMOD  REGION DETAIL UNUSED SPACE AT START ---> __TEXT                 0000000000000000-0000000000000000 [   32K] r-x\/r-x SM=COW  ...pp\/Test",
+        "signal" : 11,
+        "appVersion" : "",
+        "regionFormat" : "CA"
+      }
+    }
+  ],
+  "timeStampEnd" : "2022-03-07 07:30:54",
+  "hangDiagnostics" : [
+    {
+      "version" : "1.0.0",
+      "callStackTree" : {
+        "callStacks" : [
+          {
+            "threadAttributed" : true,
+            "callStackRootFrames" : [
+              {
+                "binaryUUID" : "3AAA2D7B-FA6A-43EE-BCD3-0CB87D7AD39A",
+                "offsetIntoBinaryTextSegment" : 123,
+                "sampleCount" : 20,
+                "binaryName" : "testBinaryName",
+                "address" : 74565
+              }
+            ]
+          }
+        ],
+        "callStackPerThread" : true
+      },
+      "diagnosticMetaData" : {
+        "appBuildVersion" : "",
+        "appVersion" : "",
+        "regionFormat" : "CA",
+        "hangDuration" : "20 sec",
+        "osVersion" : "macOS 12.2 (21D49)",
+        "deviceType" : "MacBookPro18,3",
+        "bundleIdentifier" : "com.chimehq.MetricKitTest",
+        "platformArchitecture" : "arm64e"
+      }
+    }
+  ],
+  "cpuExceptionDiagnostics" : [
+    {
+      "version" : "1.0.0",
+      "callStackTree" : {
+        "callStacks" : [
+          {
+            "callStackRootFrames" : [
+              {
+                "binaryUUID" : "D80E43C4-AF16-4F1A-8296-C59FC0C054D0",
+                "offsetIntoBinaryTextSegment" : 123,
+                "sampleCount" : 20,
+                "binaryName" : "testBinaryName",
+                "address" : 74565
+              }
+            ]
+          }
+        ],
+        "callStackPerThread" : false
+      },
+      "diagnosticMetaData" : {
+        "appBuildVersion" : "",
+        "appVersion" : "",
+        "regionFormat" : "CA",
+        "osVersion" : "macOS 12.2 (21D49)",
+        "deviceType" : "MacBookPro18,3",
+        "bundleIdentifier" : "com.chimehq.MetricKitTest",
+        "platformArchitecture" : "arm64e",
+        "totalCPUTime" : "20 sec",
+        "totalSampledTime" : "20 sec"
+      }
+    }
+  ],
+  "timeStampBegin" : "2022-03-07 07:30:54",
+  "diskWriteExceptionDiagnostics" : [
+    {
+      "version" : "1.0.0",
+      "callStackTree" : {
+        "callStacks" : [
+          {
+            "callStackRootFrames" : [
+              {
+                "binaryUUID" : "D80E43C4-AF16-4F1A-8296-C59FC0C054D0",
+                "offsetIntoBinaryTextSegment" : 123,
+                "sampleCount" : 20,
+                "binaryName" : "testBinaryName",
+                "address" : 74565
+              }
+            ]
+          }
+        ],
+        "callStackPerThread" : false
+      },
+      "diagnosticMetaData" : {
+        "appBuildVersion" : "",
+        "appVersion" : "",
+        "regionFormat" : "CA",
+        "writesCaused" : "2000 byte",
+        "osVersion" : "macOS 12.2 (21D49)",
+        "deviceType" : "MacBookPro18,3",
+        "bundleIdentifier" : "com.chimehq.MetricKitTest",
+        "platformArchitecture" : "arm64e"
+      }
+    }
+  ]
+}

@@ -13,6 +13,15 @@ public class DiagnosticPayload: Codable {
         return formatter
     }()
 
+    private static let dateWithoutMillisFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+
+        // "2020-10-10 19:35:24"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        return formatter
+    }()
+
     enum CodingKeys: String, CodingKey {
         case timeStampBegin
         case timeStampEnd
@@ -32,7 +41,20 @@ public class DiagnosticPayload: Codable {
     public static func from(data: Data) throws -> DiagnosticPayload {
         let decoder = JSONDecoder()
 
-        decoder.dateDecodingStrategy = .formatted(DiagnosticPayload.dateFormatter)
+        decoder.dateDecodingStrategy = .custom({ decoder in
+            let container = try decoder.singleValueContainer()
+            let string = try container.decode(String.self)
+
+            if let date = DiagnosticPayload.dateFormatter.date(from: string) {
+                return date
+            }
+
+            if let date = DiagnosticPayload.dateWithoutMillisFormatter.date(from: string) {
+                return date
+            }
+
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date: \(string)")
+        })
 
         return try decoder.decode(DiagnosticPayload.self, from: data)
     }

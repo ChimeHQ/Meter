@@ -8,6 +8,9 @@ class DiagnosticTests: XCTestCase {
 
         let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
 
+        XCTAssertEqual(payload.timeStampBegin, Date(timeIntervalSince1970: 1602358524))
+        XCTAssertEqual(payload.timeStampEnd, Date(timeIntervalSince1970: 1602358524))
+
         XCTAssertEqual(payload.crashDiagnostics?.count, 1)
         let crashDiagnostic = try XCTUnwrap(payload.crashDiagnostics?[0])
 
@@ -41,6 +44,18 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(frame.sampleCount, 20)
         XCTAssertEqual(frame.binaryName, "testBinaryName")
         XCTAssertEqual(frame.address, 74565)
+    }
+
+    func testReadingSimulatedMacOSCrashDiagnosticsData() throws {
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated_macOS_12", withExtension: "json"))
+        let data = try Data(contentsOf: url, options: [])
+
+        let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
+
+        XCTAssertEqual(payload.crashDiagnostics?.count, 1)
+
+        XCTAssertEqual(payload.timeStampBegin, Date(timeIntervalSince1970: 1646656254))
+        XCTAssertEqual(payload.timeStampEnd, Date(timeIntervalSince1970: 1646656254))
     }
 
     func testReadingSimulatedHangDiagnosticsData() throws {
