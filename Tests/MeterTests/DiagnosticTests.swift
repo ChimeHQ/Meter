@@ -54,8 +54,13 @@ class DiagnosticTests: XCTestCase {
 
         XCTAssertEqual(payload.crashDiagnostics?.count, 1)
 
-        XCTAssertEqual(payload.timeStampBegin, Date(timeIntervalSince1970: 1646656254))
-        XCTAssertEqual(payload.timeStampEnd, Date(timeIntervalSince1970: 1646656254))
+        // on macOS, these dates are encoded in local time, which is a real pain
+        let formatter = DateFormatter()
+
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        XCTAssertEqual(payload.timeStampBegin, formatter.date(from: "2022-03-07 07:30:54"))
+        XCTAssertEqual(payload.timeStampEnd, formatter.date(from: "2022-03-07 07:30:54"))
     }
 
     func testReadingSimulatedHangDiagnosticsData() throws {
