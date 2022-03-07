@@ -1,6 +1,5 @@
 import Foundation
 import BinaryImage
-import MetricKit
 
 public struct SymbolInfo: Codable, Hashable {
     public var offset: Int?
