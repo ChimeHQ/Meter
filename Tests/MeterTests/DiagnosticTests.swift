@@ -136,6 +136,8 @@ class DiagnosticTests: XCTestCase {
 
         XCTAssertEqual(frames.count, 32)
 
+        // guard against 64bit addresses
+        #if !os(watchOS)
         XCTAssertEqual(frames[0].binaryUUID, UUID(uuidString: "9156BE86-D4B6-3A81-8460-8728FA38C978"))
         XCTAssertEqual(frames[0].offsetIntoBinaryTextSegment, 6859616256)
         XCTAssertEqual(frames[0].sampleCount, 1)
@@ -159,5 +161,6 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(frames[31].sampleCount, 1)
         XCTAssertEqual(frames[31].binaryName, "libdyld.dylib")
         XCTAssertEqual(frames[31].address, 6795285912)
+        #endif
     }
 }

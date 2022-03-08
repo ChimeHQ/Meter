@@ -17,6 +17,8 @@ extension MockSymbolicator: Symbolicator {
 }
 
 final class SymbolicationTests: XCTestCase {
+    // guard against 64bit addresses
+    #if !os(watchOS)
     func testDlfcnSymbolicator() throws {
         // This is a fragile test, because it will only work when running
         // against 12.0 (21A344) on arm. I can think of a way to build a
@@ -36,6 +38,7 @@ final class SymbolicationTests: XCTestCase {
         XCTAssertNil(infoArray[0].lineNumber)
         XCTAssertNil(infoArray[0].file)
     }
+    #endif
 
     func testTargetCalculation() throws {
         let uuid = UUID()
