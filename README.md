@@ -38,9 +38,9 @@ for frame in tree.callStacks[0].frames {
 
 ## Custom Exceptions
 
-MetricKit diagnostics does not capture or include uncaught NSExceptions. This can make it very difficult to debug certain kinds of crashes, particularly on macOS. Meter'includes an `ExceptionInfo` type to help address this. These can be created from an `NSException` object, which will capture all the needed runtime information to emulate a standard `CallStack`.
+MetricKit diagnostics does not capture or include uncaught NSExceptions. This can make it very difficult to debug certain kinds of crashes, particularly on macOS. Meter includes an `ExceptionInfo` type to help address this. These can be created from an `NSException` object, which will capture all the needed runtime information to emulate a standard `CallStack`.
 
-How you actually capture the `NSException` is not defined by Meter. But, if you have one, the `CrashDiagnostic` type also includes an `exceptionInfo` property that can except one of these for easy encoding.
+How you actually get access to the `NSException` is not defined by Meter. But, if you have one, the `CrashDiagnostic` type also includes an `exceptionInfo` property that can except one of these for easy encoding.
 
 ## MXMetricManager and Diagnostics Polyfill
 
