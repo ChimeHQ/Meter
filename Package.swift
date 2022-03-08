@@ -12,7 +12,6 @@ let package = Package(
     targets: [
         .target(name: "BinaryImage", dependencies: [], publicHeadersPath: ""),
         .target(name: "Meter", dependencies: ["BinaryImage"]),
-        .target(name: "MeterReporter", dependencies: ["Meter"]),
         .testTarget(name: "MeterTests",
                     dependencies: ["Meter"],
                     resources: [
