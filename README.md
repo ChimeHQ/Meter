@@ -11,6 +11,7 @@ Meter is a companion library to [MetricKit](https://developer.apple.com/document
 - `MXMetricManager`-like interface for unsupported platforms
 - On-device symbolication
 - Account for MetricKit inconsistencies across platforms and types
+- Support for custom exception reporting
 
 ## Integration
 
@@ -18,11 +19,11 @@ Meter is a companion library to [MetricKit](https://developer.apple.com/document
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/ChimeHQ/Meter.git")
+    .package(url: "https://github.com/ChimeHQ/Meter")
 ]
 ```
 
-### Expanded API
+## Expanded API
 
 The MetricKit API for crash reporting is unwieldy. In particular, `MXCallStackTree` lacks any kind of interface for interacting with its structure. Meter includes some classes that make it easier to work with. In addition to providing an API for `MXCallStackTree`, Meter includes types to emulate and parse MetricKit diagnostics.
 
@@ -35,7 +36,13 @@ for frame in tree.callStacks[0].frames {
 }
 ```
 
-### MXMetricManager and Diagnostics Polyfill
+## Custom Exceptions
+
+MetricKit diagnostics does not capture or include uncaught NSExceptions. This can make it very difficult to debug certain kinds of crashes, particularly on macOS. Meter'includes an `ExceptionInfo` type to help address this. These can be created from an `NSException` object, which will capture all the needed runtime information to emulate a standard `CallStack`.
+
+How you actually capture the `NSException` is not defined by Meter. But, if you have one, the `CrashDiagnostic` type also includes an `exceptionInfo` property that can except one of these for easy encoding.
+
+## MXMetricManager and Diagnostics Polyfill
 
 MetricKit's crash reporting facilities require iOS 14/macOS 12.0, and isn't supported at all for tvOS or watchOS. You may want to start moving towards using it as a standard interface between your app and whatever system consumes the data. Meter offers an API that's very similar to MetricKit's `MXMetricManager` to help do just that.
 
@@ -60,7 +67,7 @@ Backwards compatibility is still up to you, though. One solution is [ImpactMeter
 
 If you're also looking for a way to transmit report data to your server, check out [Wells](https://github.com/ChimeHQ/Wells).
 
-### On-Device Symbolication
+## On-Device Symbolication
 
 The stack traces provided by MetricKit, like other types of crash logs, are not symbolicated. There are a bunch of different ways to tackle this problem, but one very convenient option is just to do it as a post-processing step on the device where the crash occurred. This does come, however, with one major drawback. It only works when you still have access to the same binaries. OS updates will almost certainly change all the OS binaries. The same is true for an app update, though in that case, an off-line symbolication step using a dSYM is still doable.
 
@@ -71,7 +78,7 @@ let symbolicator = DlfcnSymbolicator()
 let symPayload = symbolicator.symbolicate(payload: diagnosticPayload)
 ```
 
-#### DlfcnSymbolicator
+### DlfcnSymbolicator
 
 This class implements the `Symbolicator` protocol, and uses the functions with `dlfcn.h` to determine symbol/offset. This works, but does have some limitations. First, it relies on looking up symbols in the **currently executing** process, so it will only work if the needed binary is currently loaded.
 
@@ -79,7 +86,7 @@ Second, these functions return `<redacted>` for some binary's symbols on iOS. I 
 
 This is a relatively inexpensive symbolication pass, and is a first effort. Further work here is definitely necessary.
 
-### Suggestions or Feedback
+## Suggestions or Feedback
 
 We'd love to hear from you! Get in touch via [twitter](https://twitter.com/ChimeHQ), an issue, or a pull request.
 
