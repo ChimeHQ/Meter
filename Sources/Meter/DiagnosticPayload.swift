@@ -84,6 +84,26 @@ public class DiagnosticPayload: Codable {
 
         return (try? encoder.encode(self)) ?? Data()
     }
+
+    public var isSimulated: Bool {
+        if crashDiagnostics?.allSatisfy({ $0.isSimulated }) == false {
+            return false
+        }
+
+        if hangDiagnostics?.allSatisfy({ $0.isSimulated }) == false {
+            return false
+        }
+
+        if cpuExceptionDiagnostics?.allSatisfy({ $0.isSimulated }) == false {
+            return false
+        }
+
+        if diskWriteExceptionDiagnostics?.allSatisfy({ $0.isSimulated }) == false {
+            return false
+        }
+
+        return true
+    }
 }
 
 public extension DiagnosticPayload {
