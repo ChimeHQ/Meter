@@ -224,6 +224,10 @@ public class CrashDiagnostic: Codable {
     public func jsonRepresentation() -> Data {
         return (try? JSONEncoder().encode(self)) ?? Data()
     }
+
+    public var isSimulated: Bool {
+        return callStackTree.isSimulated
+    }
 }
 
 public class HangMetaData: Codable {
@@ -297,6 +301,10 @@ public class HangDiagnostic: Codable {
 
     public var applicationVersion: String {
         return internalMetaData.applicationVersion
+    }
+
+    public var isSimulated: Bool {
+        return callStackTree.isSimulated
     }
 }
 
@@ -376,6 +384,10 @@ public class CPUExceptionDiagnostic: Codable {
     public var applicationVersion: String {
         return internalMetaData.applicationVersion
     }
+
+    public var isSimulated: Bool {
+        return callStackTree.isSimulated
+    }
 }
 
 public class DiskWriteExceptionMetaData: Codable {
@@ -449,5 +461,9 @@ public class DiskWriteExceptionDiagnostic: Codable {
 
     public var applicationVersion: String {
         return internalMetaData.applicationVersion
+    }
+
+    public var isSimulated: Bool {
+        return callStackTree.isSimulated
     }
 }

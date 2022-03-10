@@ -90,6 +90,10 @@ public struct Frame: Codable, Hashable {
                       approximateSize: size,
                       name: binaryName)
     }
+
+    public var isSimulated: Bool {
+        return binaryName == "testBinaryName"
+    }
 }
 
 public class CallStack: NSObject, Codable {
@@ -110,6 +114,10 @@ public class CallStack: NSObject, Codable {
     /// Returns a single array of Frame objects
     public var frames: [Frame] {
         return rootFrames.flatMap({ [$0] + $0.flattenedFrames })
+    }
+
+    public var isSimulated: Bool {
+        return rootFrames.first?.isSimulated == true
     }
 }
 
@@ -141,5 +149,9 @@ public class CallStackTree: Codable {
         } catch {
             return Data()
         }
+    }
+
+    public var isSimulated: Bool {
+        return callStacks.first?.isSimulated == true
     }
 }

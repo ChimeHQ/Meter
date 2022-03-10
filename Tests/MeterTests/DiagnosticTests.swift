@@ -26,6 +26,7 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(crashDiagnostic.signal, 11)
         XCTAssertEqual(crashDiagnostic.exceptionCode, 0)
         XCTAssertEqual(crashDiagnostic.exceptionType, 1)
+        XCTAssertTrue(crashDiagnostic.isSimulated)
 
         let tree = crashDiagnostic.callStackTree
 
@@ -54,6 +55,10 @@ class DiagnosticTests: XCTestCase {
 
         XCTAssertEqual(payload.crashDiagnostics?.count, 1)
 
+        let crashDiagnostic = try XCTUnwrap(payload.crashDiagnostics?[0])
+
+        XCTAssertTrue(crashDiagnostic.isSimulated)
+
         // on macOS, these dates are encoded in local time, which is a real pain
         let formatter = DateFormatter()
 
@@ -73,6 +78,7 @@ class DiagnosticTests: XCTestCase {
         let diagnostic = try XCTUnwrap(payload.hangDiagnostics?[0])
 
         XCTAssertEqual(diagnostic.metaData.applicationBuildVersion, "1")
+        XCTAssertTrue(diagnostic.isSimulated)
 
         let tree = diagnostic.callStackTree
 
@@ -100,6 +106,7 @@ class DiagnosticTests: XCTestCase {
         let diagnostic = try XCTUnwrap(payload.cpuExceptionDiagnostics?[0])
 
         XCTAssertEqual(diagnostic.metaData.applicationBuildVersion, "1")
+        XCTAssertTrue(diagnostic.isSimulated)
 
         let tree = diagnostic.callStackTree
 
@@ -120,6 +127,8 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(payload.crashDiagnostics?.count, 2)
 
         let crashDiagnostic = try XCTUnwrap(payload.crashDiagnostics?[0])
+
+        XCTAssertFalse(crashDiagnostic.isSimulated)
 
         let tree = crashDiagnostic.callStackTree
 
