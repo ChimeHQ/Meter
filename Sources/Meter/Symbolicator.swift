@@ -4,11 +4,13 @@ import BinaryImage
 public struct SymbolInfo: Codable, Hashable {
     public var offset: Int?
     public var symbol: String
+    public var demangledSymbol: String?
     public var file: String?
     public var lineNumber: Int?
 
-    public init(symbol: String, offset: Int? = nil, file: String? = nil, lineNumber: Int? = nil) {
+    public init(symbol: String, demangledSymbol: String? = nil, offset: Int? = nil, file: String? = nil, lineNumber: Int? = nil) {
         self.symbol = symbol
+        self.demangledSymbol = demangledSymbol
         self.offset = offset
         self.file = file
         self.lineNumber = lineNumber
