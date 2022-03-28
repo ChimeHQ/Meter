@@ -13,6 +13,8 @@ Meter is a companion library to [MetricKit](https://developer.apple.com/document
 - Account for MetricKit inconsistencies across platforms and types
 - Support for custom exception reporting
 
+If you're also looking for a way to transmit MetricKit data to your server, have a look at [MeterReporter](https://github.com/ChimeHQ/MeterReporter). It uses Meter under the hood, and takes care of the details.
+
 ## Integration
 
 ### Swift Package Manager
@@ -64,8 +66,6 @@ MeterPayloadManager.shared.deliver(payloads)
 This makes it easier to support the full capabilities of MetricKit when available, and gracefully degrade when they aren't. It can be nice to have a uniform interface to whatever backend system you are using to consume the reports. And, as you move towards a supported minimum, and as (hopefully) Apple starts supporting MetricKit on all platforms, it will be easier to pull out Meter altogether.
 
 Backwards compatibility is still up to you, though. One solution is [ImpactMeterAdapter](https://github.com/ChimeHQ/ImpactMeterAdapter), which uses [Impact](https://github.com/ChimeHQ/Impact) to collect crash data for OSes that don't support `MXCrashDiagnostic`.
-
-If you're also looking for a way to transmit report data to your server, check out [Wells](https://github.com/ChimeHQ/Wells).
 
 ## On-Device Symbolication
 
