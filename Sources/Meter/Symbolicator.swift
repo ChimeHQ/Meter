@@ -98,7 +98,8 @@ public extension Symbolicator {
     func symbolicate(diagnostic: CrashDiagnostic) -> CrashDiagnostic {
         let metadata = CrashMetaData(diagnostic: diagnostic)
 
-        let symTree = symbolicate(tree: diagnostic.callStackTree, withOffsetAsLoadAddress: true)
+		let useOffsets = diagnostic.usesOffsetAsLoadAddress
+        let symTree = symbolicate(tree: diagnostic.callStackTree, withOffsetAsLoadAddress: useOffsets)
 
         return CrashDiagnostic(metaData: metadata, callStackTree: symTree)
     }

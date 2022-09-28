@@ -3,16 +3,18 @@ import XCTest
 import BinaryImage
 
 struct MockSymbolicator {
-    var mockResults: [Int: [SymbolInfo]]
+	typealias SymbolicationHandler = (Int, SymbolicationTarget) -> [SymbolInfo]
 
-    init() {
-        self.mockResults = [:]
+	var symbolicationHandler: SymbolicationHandler
+
+	init(symbolicationHandler: @escaping SymbolicationHandler) {
+		self.symbolicationHandler = symbolicationHandler
     }
 }
 
 extension MockSymbolicator: Symbolicator {
     func symbolicate(address: Int, in target: SymbolicationTarget) -> [SymbolInfo] {
-        return mockResults[address] ?? []
+        return symbolicationHandler(address, target)
     }
 }
 
@@ -76,10 +78,11 @@ final class SymbolicationTests: XCTestCase {
         let symbolInfoB = SymbolInfo(symbol: "symbolB", offset: 10)
         let symbolInfoA = SymbolInfo(symbol: "symbolA", offset: 10)
 
-        var mockSymbolicator = MockSymbolicator()
+		let mockResults = [frameB.address: [symbolInfoB], frameA.address: [symbolInfoA]]
 
-        mockSymbolicator.mockResults[frameB.address] = [symbolInfoB]
-        mockSymbolicator.mockResults[frameA.address] = [symbolInfoA]
+		let mockSymbolicator = MockSymbolicator { addr, _ in
+			return mockResults[addr]!
+		}
 
         let symbolicatedStack = mockSymbolicator.symbolicate(callStack: callStack, withOffsetAsLoadAddress: true)
 
@@ -94,6 +97,59 @@ final class SymbolicationTests: XCTestCase {
         XCTAssertEqual(symbolicatedStack.rootFrames[0].subFrames?[0].symbolInfo?[0].offset, 10)
     }
 
+	func testUsingCrashOffsets() {
+		let uuidA = UUID()
+		let frameA = Frame(binaryUUID: uuidA,
+						  offsetIntoBinaryTextSegment: 15,
+						  sampleCount: 1,
+						  binaryName: "binaryA",
+						  address: 1015, subFrames: [])
+		let callStack = CallStack(threadAttributed: true, rootFrames: [frameA])
+		let tree = CallStackTree(callStacks: [callStack], callStackPerThread: true)
+
+		let offsetCrashMetaData = CrashMetaData(deviceType: "",
+										  applicationBuildVersion: "",
+										  applicationVersion: "",
+										  osVersion: "macOS 13.0 (22A5358e)",
+										  platformArchitecture: "",
+										  regionFormat: "",
+										  virtualMemoryRegionInfo: nil,
+										  exceptionType: nil,
+										  terminationReason: nil,
+										  exceptionCode: nil,
+										  signal: nil)
+		let offsetCrashDiagnotic = CrashDiagnostic(metaData: offsetCrashMetaData, callStackTree: tree)
+
+		let absoluteCrashMetaData = CrashMetaData(deviceType: "",
+										  applicationBuildVersion: "",
+										  applicationVersion: "",
+										  osVersion: "macOS 12.1",
+										  platformArchitecture: "",
+										  regionFormat: "",
+										  virtualMemoryRegionInfo: nil,
+										  exceptionType: nil,
+										  terminationReason: nil,
+										  exceptionCode: nil,
+										  signal: nil)
+		let absoluteCrashDiagnotic = CrashDiagnostic(metaData: absoluteCrashMetaData, callStackTree: tree)
+
+		var symbolicationTarget: SymbolicationTarget? = nil
+
+		let mockSymbolicator = MockSymbolicator { _, target in
+			symbolicationTarget = target
+
+			return []
+		}
+
+		_ = mockSymbolicator.symbolicate(diagnostic: offsetCrashDiagnotic)
+
+		XCTAssertEqual(symbolicationTarget?.loadAddress, 1000)
+
+		_ = mockSymbolicator.symbolicate(diagnostic: absoluteCrashDiagnotic)
+
+		XCTAssertEqual(symbolicationTarget?.loadAddress, 15)
+	}
+
     func testSymbolicatesAllDiagnosticTypes() throws {
         let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
         let data = try Data(contentsOf: url, options: [])
@@ -101,9 +157,11 @@ final class SymbolicationTests: XCTestCase {
 
         let symbolInfo = SymbolInfo(symbol: "symSymbol", offset: 10)
 
-        var mockSymbolicator = MockSymbolicator()
+		let mockResults = [74565: [symbolInfo]]
 
-        mockSymbolicator.mockResults[74565] = [symbolInfo]
+		let mockSymbolicator = MockSymbolicator { addr, _ in
+			return mockResults[addr]!
+		}
 
         let symPayload = mockSymbolicator.symbolicate(payload: payload)
 

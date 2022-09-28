@@ -17,8 +17,6 @@ If you're also looking for a way to transmit MetricKit data to your server, have
 
 ## Integration
 
-### Swift Package Manager
-
 ```swift
 dependencies: [
     .package(url: "https://github.com/ChimeHQ/Meter")

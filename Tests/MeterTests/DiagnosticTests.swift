@@ -28,6 +28,7 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(crashDiagnostic.exceptionCode, 0)
         XCTAssertEqual(crashDiagnostic.exceptionType, 1)
         XCTAssertTrue(crashDiagnostic.isSimulated)
+		XCTAssertTrue(crashDiagnostic.usesOffsetAsLoadAddress)
 
         let tree = crashDiagnostic.callStackTree
 
@@ -61,6 +62,7 @@ class DiagnosticTests: XCTestCase {
         let crashDiagnostic = try XCTUnwrap(payload.crashDiagnostics?[0])
 
         XCTAssertTrue(crashDiagnostic.isSimulated)
+		XCTAssertTrue(crashDiagnostic.usesOffsetAsLoadAddress)
 
         // on macOS, these dates are encoded in local time, which is a real pain
         let formatter = DateFormatter()
@@ -70,6 +72,22 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(payload.timeStampBegin, formatter.date(from: "2022-03-07 07:30:54"))
         XCTAssertEqual(payload.timeStampEnd, formatter.date(from: "2022-03-07 07:30:54"))
     }
+
+	func testReadingSimulatedMacOS13CrashDiagnosticsData() throws {
+		let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated_macOS_13", withExtension: "json"))
+		let data = try Data(contentsOf: url, options: [])
+
+		let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
+
+		XCTAssertTrue(payload.isSimulated)
+
+		XCTAssertEqual(payload.crashDiagnostics?.count, 1)
+
+		let crashDiagnostic = try XCTUnwrap(payload.crashDiagnostics?[0])
+
+		XCTAssertTrue(crashDiagnostic.isSimulated)
+		XCTAssertFalse(crashDiagnostic.usesOffsetAsLoadAddress)
+	}
 
     func testReadingSimulatedHangDiagnosticsData() throws {
         let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
@@ -140,6 +158,8 @@ class DiagnosticTests: XCTestCase {
         XCTAssertFalse(crashDiagnostic.isSimulated)
 
         let tree = crashDiagnostic.callStackTree
+
+		XCTAssertTrue(crashDiagnostic.usesOffsetAsLoadAddress)
 
         XCTAssertTrue(tree.callStackPerThread)
         XCTAssertEqual(tree.callStacks.count, 10);

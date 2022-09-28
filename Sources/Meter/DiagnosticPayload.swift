@@ -248,6 +248,21 @@ public class CrashDiagnostic: Codable {
     public var isSimulated: Bool {
         return callStackTree.isSimulated
     }
+
+	/// Determine how `offsetIntoBinaryTextSegment` data should be intrepreted.
+	public var usesOffsetAsLoadAddress: Bool {
+		let osVersion = metaData.osVersion
+
+		if osVersion.hasPrefix("macOS 12") {
+			return true
+		}
+
+		if osVersion.hasPrefix("iPhone OS 14") || osVersion.hasPrefix("iPhone OS 15") {
+			return true
+		}
+
+		return false
+	}
 }
 
 public class HangMetaData: Codable {
