@@ -74,7 +74,7 @@ public extension Symbolicator {
         let subframes = frame.subFrames ?? []
         let symSubframes = subframes.map({ symbolicate(frame: $0, withOffsetAsLoadAddress: withOffsetAsLoadAddress) })
 
-        let addr = frame.address
+		let addr = Int(frame.address)
         let target = frame.symbolicationTarget(withOffsetAsLoadAddress: withOffsetAsLoadAddress)
         let info = target.map({ symbolicate(address: addr, in: $0) }) ?? []
 

@@ -43,14 +43,14 @@ public struct Binary: Codable, Hashable {
 
 public struct Frame: Codable, Hashable {
     public var binaryUUID: UUID?
-    public var offsetIntoBinaryTextSegment: Int?
+    public var offsetIntoBinaryTextSegment: UInt64?
     public var sampleCount: Int?
     public var binaryName: String?
-    public var address: Int
+    public var address: UInt64
     public var subFrames: [Frame]?
     public var symbolInfo: [SymbolInfo]?
 
-    public init(binaryUUID: UUID? = nil, offsetIntoBinaryTextSegment: Int? = nil, sampleCount: Int? = nil, binaryName: String? = nil, address: Int, subFrames: [Frame]?, symbolInfo: [SymbolInfo]? = nil) {
+    public init(binaryUUID: UUID? = nil, offsetIntoBinaryTextSegment: UInt64? = nil, sampleCount: Int? = nil, binaryName: String? = nil, address: UInt64, subFrames: [Frame]?, symbolInfo: [SymbolInfo]? = nil) {
         self.binaryUUID = binaryUUID
         self.offsetIntoBinaryTextSegment = offsetIntoBinaryTextSegment
         self.sampleCount = sampleCount
@@ -82,12 +82,12 @@ public struct Frame: Codable, Hashable {
             return nil
         }
 
-        let loadAddress = withOffsetAsLoadAddress ? offset : address - offset
+		let loadAddress = withOffsetAsLoadAddress ? offset : address - offset
         let size = address - loadAddress + 1
 
         return Binary(uuid: uuid,
-                      loadAddress: loadAddress,
-                      approximateSize: size,
+                      loadAddress: Int(loadAddress),
+                      approximateSize: Int(size),
                       name: binaryName)
     }
 

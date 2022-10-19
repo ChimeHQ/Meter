@@ -106,7 +106,7 @@ extension DlfcnSymbolicator: Symbolicator {
             return []
         }
 
-        let loadAddress = Int(bitPattern: loadedImage.header)
+		let loadAddress = Int(bitPattern: loadedImage.header)
         let relativeAddress = address - target.loadAddress
         let processAddress = loadAddress + relativeAddress
 

@@ -78,7 +78,7 @@ final class SymbolicationTests: XCTestCase {
         let symbolInfoB = SymbolInfo(symbol: "symbolB", offset: 10)
         let symbolInfoA = SymbolInfo(symbol: "symbolA", offset: 10)
 
-		let mockResults = [frameB.address: [symbolInfoB], frameA.address: [symbolInfoA]]
+		let mockResults = [Int(frameB.address): [symbolInfoB], Int(frameA.address): [symbolInfoA]]
 
 		let mockSymbolicator = MockSymbolicator { addr, _ in
 			return mockResults[addr]!

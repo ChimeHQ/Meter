@@ -201,4 +201,49 @@ class DiagnosticTests: XCTestCase {
         XCTAssertEqual(frames[31].address, 6795285912)
         #endif
     }
+
+	func testVeryLargeAddress() throws {
+		let value = """
+{
+  "timeStampEnd" : "2022-10-07 14:41:00",
+  "timeStampBegin" : "2022-10-07 14:41:00",
+  "hangDiagnostics" : [
+	{
+	  "version" : "1.0.0",
+	  "callStackTree" : {
+		"callStacks" : [
+		  {
+			"threadAttributed" : true,
+			"callStackRootFrames" : [
+			  {
+				"binaryUUID" : "1A111731-DB37-3138-BB6A-4F8CC7551374",
+				"offsetIntoBinaryTextSegment" : 239784,
+				"sampleCount" : 434,
+				"subFrames" : [],
+				"binaryName" : "kernel.release.t8103",
+				"address" : 18446741874824079528
+			  }
+			]
+		  }
+		],
+		"callStackPerThread" : true
+	  },
+	  "diagnosticMetaData" : {
+		"appBuildVersion" : "1",
+		"appVersion" : "1.0.0",
+		"regionFormat" : "US",
+		"hangDuration" : "7 sec",
+		"osVersion" : "macOS 13.0 (22A5358e)",
+		"deviceType" : "Macmini9,1",
+		"bundleIdentifier" : "x.y.x",
+		"platformArchitecture" : "arm64e"
+	  }
+	}
+  ]
+}
+"""
+		let data = try XCTUnwrap(value.data(using: .utf8))
+
+		XCTAssertNoThrow(try DiagnosticPayload.from(data: data))
+	}
 }

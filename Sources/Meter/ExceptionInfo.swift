@@ -51,11 +51,12 @@ extension NSException {
             }
 
             let subFrames = [frame].compactMap({ $0 })
+			let offset = binary.map { UInt64($0.loadAddress) }
 
             frame = Frame(binaryUUID: binary?.uuid,
-                          offsetIntoBinaryTextSegment: binary?.loadAddress,
+                          offsetIntoBinaryTextSegment: offset,
                           binaryName: binary?.name,
-                          address: addr,
+                          address: UInt64(addr),
                           subFrames: subFrames,
                           symbolInfo: [info.symbolInfo])
         }
