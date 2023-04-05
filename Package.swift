@@ -10,7 +10,7 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        .target(name: "BinaryImage"),
+        .target(name: "BinaryImage", publicHeadersPath: "."),
         .target(name: "Meter", dependencies: ["BinaryImage"]),
         .testTarget(name: "MeterTests",
                     dependencies: ["Meter"],
