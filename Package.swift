@@ -15,7 +15,7 @@ let package = Package(
         .testTarget(name: "MeterTests",
                     dependencies: ["Meter"],
                     resources: [
-                        .copy("Resources"),
+                        .process("Resources"),
                     ]),
         .testTarget(name: "BinaryImageTests",
                     dependencies: ["BinaryImage"]),

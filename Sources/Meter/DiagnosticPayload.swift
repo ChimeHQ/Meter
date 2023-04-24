@@ -272,7 +272,7 @@ public class HangMetaData: Codable {
     public let osVersion: String
     public let platformArchitecture: String
     public let regionFormat: String
-    private let hangDuration: String
+    public let hangDuration: String
 
     enum CodingKeys: String, CodingKey {
         case applicationBuildVersion = "appBuildVersion"
@@ -284,14 +284,14 @@ public class HangMetaData: Codable {
         case hangDuration
     }
 
-    public init(deviceType: String, applicationBuildVersion: String, applicationVersion: String, osVersion: String, platformArchitecture: String, regionFormat: String) {
+    public init(deviceType: String, applicationBuildVersion: String, applicationVersion: String, osVersion: String, platformArchitecture: String, regionFormat: String, hangDuration: String) {
         self.deviceType = deviceType
         self.applicationBuildVersion = applicationBuildVersion
         self.applicationVersion = applicationVersion
         self.osVersion = osVersion
         self.platformArchitecture = platformArchitecture
         self.regionFormat = regionFormat
-        self.hangDuration = ""
+        self.hangDuration = hangDuration
     }
 
     public init(diagnostic: HangDiagnostic) {
@@ -301,7 +301,7 @@ public class HangMetaData: Codable {
         self.osVersion = diagnostic.metaData.osVersion
         self.platformArchitecture = diagnostic.metaData.platformArchitecture
         self.regionFormat = diagnostic.metaData.regionFormat
-        self.hangDuration = ""
+        self.hangDuration = diagnostic.metaData.hangDuration
     }
 
     public func jsonRepresentation() -> Data {
@@ -324,6 +324,10 @@ public class HangDiagnostic: Codable {
         self.version = "1.0.0"
         self.internalMetaData = metaData
         self.callStackTree = callStackTree
+    }
+
+    public var hangDuration: String {
+        return internalMetaData.hangDuration
     }
 
     public func jsonRepresentation() -> Data {
@@ -350,8 +354,8 @@ public class CPUExceptionMetaData: Codable {
     public let osVersion: String
     public let platformArchitecture: String
     public let regionFormat: String
-    private let totalCPUTime: String
-    private let totalSampledTime: String
+    public let totalCPUTime: String
+    public let totalSampledTime: String
 
     enum CodingKeys: String, CodingKey {
         case applicationBuildVersion = "appBuildVersion"
@@ -364,15 +368,15 @@ public class CPUExceptionMetaData: Codable {
         case totalSampledTime
     }
 
-    public init(deviceType: String, applicationBuildVersion: String, applicationVersion: String, osVersion: String, platformArchitecture: String, regionFormat: String) {
+    public init(deviceType: String, applicationBuildVersion: String, applicationVersion: String, osVersion: String, platformArchitecture: String, regionFormat: String, totalCPUTime: String, totalSampledTime: String) {
         self.deviceType = deviceType
         self.applicationBuildVersion = applicationBuildVersion
         self.applicationVersion = applicationVersion
         self.osVersion = osVersion
         self.platformArchitecture = platformArchitecture
         self.regionFormat = regionFormat
-        self.totalCPUTime = ""
-        self.totalSampledTime = ""
+        self.totalCPUTime = totalCPUTime
+        self.totalSampledTime = totalSampledTime
     }
 
     public init(diagnostic: CPUExceptionDiagnostic) {
@@ -382,8 +386,8 @@ public class CPUExceptionMetaData: Codable {
         self.osVersion = diagnostic.metaData.osVersion
         self.platformArchitecture = diagnostic.metaData.platformArchitecture
         self.regionFormat = diagnostic.metaData.regionFormat
-        self.totalCPUTime = ""
-        self.totalSampledTime = ""
+        self.totalCPUTime = diagnostic.metaData.totalCPUTime
+        self.totalSampledTime = diagnostic.metaData.totalSampledTime
     }
 
     public func jsonRepresentation() -> Data {
@@ -406,6 +410,14 @@ public class CPUExceptionDiagnostic: Codable {
         self.version = "1.0.0"
         self.internalMetaData = metaData
         self.callStackTree = callStackTree
+    }
+
+    public var totalCPUTime: String {
+        return internalMetaData.totalCPUTime
+    }
+
+    public var totalSampledTime: String {
+        return internalMetaData.totalSampledTime
     }
 
     public func jsonRepresentation() -> Data {
@@ -432,7 +444,7 @@ public class DiskWriteExceptionMetaData: Codable {
     public let osVersion: String
     public let platformArchitecture: String
     public let regionFormat: String
-    private let writesCaused: String
+    public let writesCaused: String
 
     enum CodingKeys: String, CodingKey {
         case applicationBuildVersion = "appBuildVersion"
@@ -444,14 +456,14 @@ public class DiskWriteExceptionMetaData: Codable {
         case writesCaused
     }
 
-    public init(deviceType: String, applicationBuildVersion: String, applicationVersion: String, osVersion: String, platformArchitecture: String, regionFormat: String) {
+    public init(deviceType: String, applicationBuildVersion: String, applicationVersion: String, osVersion: String, platformArchitecture: String, regionFormat: String, writesCaused: String) {
         self.deviceType = deviceType
         self.applicationBuildVersion = applicationBuildVersion
         self.applicationVersion = applicationVersion
         self.osVersion = osVersion
         self.platformArchitecture = platformArchitecture
         self.regionFormat = regionFormat
-        self.writesCaused = ""
+        self.writesCaused = writesCaused
     }
 
     public init(diagnostic: DiskWriteExceptionDiagnostic) {
@@ -461,7 +473,7 @@ public class DiskWriteExceptionMetaData: Codable {
         self.osVersion = diagnostic.metaData.osVersion
         self.platformArchitecture = diagnostic.metaData.platformArchitecture
         self.regionFormat = diagnostic.metaData.regionFormat
-        self.writesCaused = ""
+        self.writesCaused = diagnostic.metaData.writesCaused
     }
 
     public func jsonRepresentation() -> Data {
@@ -484,6 +496,10 @@ public class DiskWriteExceptionDiagnostic: Codable {
         self.version = "1.0.0"
         self.internalMetaData = metaData
         self.callStackTree = callStackTree
+    }
+
+    public var writesCaused: String {
+        return internalMetaData.writesCaused
     }
 
     public func jsonRepresentation() -> Data {
