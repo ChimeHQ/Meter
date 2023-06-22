@@ -14,8 +14,8 @@ env:
 jobs:
   test:
     name: Test with Swift
-    runs-on: macOS-11
+    runs-on: macOS-13
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: swift test
         run: swift test
