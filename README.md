@@ -39,7 +39,7 @@ for frame in tree.callStacks[0].frames {
 
 ## Custom Exceptions
 
-MetricKit diagnostics does not capture or include uncaught NSExceptions. This can make it very difficult to debug certain kinds of crashes, particularly on macOS. Meter includes an `ExceptionInfo` type to help address this. These can be created from an `NSException` object, which will capture all the needed runtime information to emulate a standard `CallStack`.
+As of iOS 17, macOS 14, visionOS 1.0, MetricKit does capture uncaught [NSExceptions](https://developer.apple.com/documentation/metrickit/mxcrashdiagnostic/4172947-exceptionreason). To help support older OSes, and exceptions that do not originate from places that are covered by this feature, custom exceptions are also supported. These can be created from an `NSException` object, which will capture all the needed runtime information to emulate a standard `CallStack`.
 
 How you actually get access to the `NSException` is not defined by Meter. But, if you have one, the `CrashDiagnostic` type also includes an `exceptionInfo` property that can accept one of these for easy encoding.
 
@@ -84,6 +84,12 @@ This class implements the `Symbolicator` protocol, and uses the functions with `
 Second, these functions return `<redacted>` for some binary's symbols on iOS. I know the symbol information is still accessible from the binary, so it's unclear why this is done.
 
 This is a relatively inexpensive symbolication pass, and is a first effort. Further work here is definitely necessary.
+
+## Contributing and Collaboration
+
+I prefer collaboration, and would love to find ways to work together if you have a similar project.
+
+I prefer indentation with tabs for improved accessibility. But, I'd rather you use the system you want and make a PR than hesitate because of whitespace.
 
 ## Suggestions or Feedback
 
