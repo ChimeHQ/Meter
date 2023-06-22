@@ -124,9 +124,9 @@ public class CallStackTree: Codable {
 
 #if canImport(MetricKit)
 #if compiler(>=5.9)
-	@available(iOS 14.0, macOS 12.0, *)
-#else
 	@available(iOS 14.0, macOS 12.0, xrOS 1.0, *)
+#else
+	@available(iOS 14.0, macOS 12.0, *)
 #endif
 	@available(tvOS, unavailable)
 	@available(watchOS, unavailable)
