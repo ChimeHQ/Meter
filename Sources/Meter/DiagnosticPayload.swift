@@ -1,5 +1,5 @@
 import Foundation
-#if os(iOS) || os(macOS)
+#if canImport(MetricKit)
 import MetricKit
 #endif
 
@@ -59,14 +59,20 @@ public class DiagnosticPayload: Codable {
         return try decoder.decode(DiagnosticPayload.self, from: data)
     }
 
-    #if os(iOS) || os(macOS)
-    @available(iOS 14.0, macOS 12.0, *)
-    public static func from(payload: MXDiagnosticPayload) throws -> DiagnosticPayload {
-        let data = payload.jsonRepresentation()
+#if canImport(MetricKit)
+#if compiler(>=5.9)
+	@available(iOS 14.0, macOS 12.0, *)
+#else
+	@available(iOS 14.0, macOS 12.0, xrOS 1.0, *)
+#endif
+	@available(tvOS, unavailable)
+	@available(watchOS, unavailable)
+	public static func from(payload: MXDiagnosticPayload) throws -> DiagnosticPayload {
+		let data = payload.jsonRepresentation()
 
-        return try from(data: data)
-    }
-    #endif
+		return try from(data: data)
+	}
+#endif
 
     public init(timeStampBegin: Date, timeStampEnd: Date, crashDiagnostics: [CrashDiagnostic]?, hangDiagnostics: [HangDiagnostic]?, cpuExceptionDiagnostics: [CPUExceptionDiagnostic]?, diskWriteExceptionDiagnostics: [DiskWriteExceptionDiagnostic]?) {
         self.timeStampBegin = timeStampBegin
@@ -112,12 +118,18 @@ public extension DiagnosticPayload {
     }
 }
 
-#if os(iOS) || os(macOS)
+#if canImport(MetricKit)
+#if compiler(>=5.9)
 @available(iOS 14.0, macOS 12.0, *)
+#else
+@available(iOS 14.0, macOS 12.0, xrOS 1.0, *)
+#endif
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
 public extension MXDiagnosticPayload {
-    var dateRange: Range<Date> {
-        return timeStampBegin..<timeStampEnd
-    }
+	var dateRange: Range<Date> {
+		return timeStampBegin..<timeStampEnd
+	}
 }
 #endif
 
@@ -128,6 +140,9 @@ public class CrashMetaData: Codable {
     public let osVersion: String
     public let platformArchitecture: String
     public let regionFormat: String
+	public let isTestFlightApp: Bool?
+	public let lowPowerModeEnabled: Bool?
+	public let pid: Int?
     public let virtualMemoryRegionInfo: String?
     public let exceptionType: Int?
     public let terminationReason: String?
@@ -146,22 +161,44 @@ public class CrashMetaData: Codable {
         case platformArchitecture
         case regionFormat
         case deviceType
+		case isTestFlightApp
+		case lowPowerModeEnabled
+		case pid
 
     }
 
-    public init(deviceType: String, applicationBuildVersion: String, applicationVersion: String, osVersion: String, platformArchitecture: String, regionFormat: String, virtualMemoryRegionInfo: String?, exceptionType: Int?, terminationReason: String?, exceptionCode: Int?, signal: Int?) {
-        self.deviceType = deviceType
-        self.applicationBuildVersion = applicationBuildVersion
-        self.applicationVersion = applicationVersion
-        self.osVersion = osVersion
-        self.platformArchitecture = platformArchitecture
-        self.regionFormat = regionFormat
-        self.virtualMemoryRegionInfo = virtualMemoryRegionInfo
-        self.exceptionType = exceptionType
-        self.terminationReason = terminationReason
-        self.exceptionCode = exceptionCode
-        self.signal = signal
-    }
+	public init(
+		deviceType: String,
+		applicationBuildVersion: String,
+		applicationVersion: String,
+		osVersion: String,
+		platformArchitecture: String,
+		regionFormat: String,
+		isTestFlightApp: Bool?,
+		lowPowerModeEnabled: Bool?,
+		pid: Int?,
+		virtualMemoryRegionInfo: String?,
+		exceptionType: Int?,
+		terminationReason: String?,
+		exceptionCode: Int?,
+		signal: Int?
+	) {
+		self.deviceType = deviceType
+		self.applicationBuildVersion = applicationBuildVersion
+		self.applicationVersion = applicationVersion
+		self.osVersion = osVersion
+		self.platformArchitecture = platformArchitecture
+		self.regionFormat = regionFormat
+		self.isTestFlightApp = isTestFlightApp
+		self.lowPowerModeEnabled = lowPowerModeEnabled
+		self.pid = pid
+
+		self.virtualMemoryRegionInfo = virtualMemoryRegionInfo
+		self.exceptionType = exceptionType
+		self.terminationReason = terminationReason
+		self.exceptionCode = exceptionCode
+		self.signal = signal
+	}
 
     public init(diagnostic: CrashDiagnostic) {
         self.deviceType = diagnostic.metaData.deviceType
@@ -175,6 +212,9 @@ public class CrashMetaData: Codable {
         self.terminationReason = diagnostic.terminationReason
         self.exceptionCode = diagnostic.exceptionCode?.intValue
         self.signal = diagnostic.signal?.intValue
+		self.isTestFlightApp = diagnostic.metaData.isTestFlightApp
+		self.lowPowerModeEnabled = diagnostic.metaData.lowPowerModeEnabled
+		self.pid = diagnostic.metaData.pid
     }
 
     public func jsonRepresentation() -> Data {

@@ -16,7 +16,7 @@ class Subscriber: MeterPayloadSubscriber {
     }
 }
 
-class PayloadProviderTests: XCTestCase {
+final class PayloadProviderTests: XCTestCase {
     func testReceivingPayloads() {
         let provider = MeterPayloadManager.shared
         let subscriber = Subscriber()
@@ -38,6 +38,9 @@ class PayloadProviderTests: XCTestCase {
                                      osVersion: "abcdef",
                                      platformArchitecture: "arm64",
                                      regionFormat: "CA",
+									 isTestFlightApp: nil,
+									 lowPowerModeEnabled: nil,
+									 pid: 0,
                                      virtualMemoryRegionInfo: nil,
                                      exceptionType: 5,
                                      terminationReason: "crash",

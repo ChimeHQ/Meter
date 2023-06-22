@@ -1,9 +1,9 @@
 import XCTest
 @testable import Meter
 
-class DiagnosticTests: XCTestCase {
+final class DiagnosticTests: XCTestCase {
     func testReadingSimulatedCrashDiagnosticsData() throws {
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json", subdirectory: "Resources"))
         let data = try Data(contentsOf: url, options: [])
 
         let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
@@ -50,7 +50,7 @@ class DiagnosticTests: XCTestCase {
     }
 
     func testReadingSimulatedMacOSCrashDiagnosticsData() throws {
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated_macOS_12", withExtension: "json"))
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated_macOS_12", withExtension: "json", subdirectory: "Resources"))
         let data = try Data(contentsOf: url, options: [])
 
         let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
@@ -74,7 +74,7 @@ class DiagnosticTests: XCTestCase {
     }
 
 	func testReadingSimulatedMacOS13CrashDiagnosticsData() throws {
-		let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated_macOS_13", withExtension: "json"))
+		let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated_macOS_13", withExtension: "json", subdirectory: "Resources"))
 		let data = try Data(contentsOf: url, options: [])
 
 		let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
@@ -90,7 +90,7 @@ class DiagnosticTests: XCTestCase {
 	}
 
     func testReadingSimulatedHangDiagnosticsData() throws {
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json", subdirectory: "Resources"))
         let data = try Data(contentsOf: url, options: [])
 
         let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
@@ -120,7 +120,7 @@ class DiagnosticTests: XCTestCase {
     }
 
     func testReadingSimulatedCPUExceptionDiagnosticsData() throws {
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json", subdirectory: "Resources"))
         let data = try Data(contentsOf: url, options: [])
 
         let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
@@ -145,7 +145,7 @@ class DiagnosticTests: XCTestCase {
     }
 
     func testRealPayloadWithSubframes() throws {
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "real_report", withExtension: "json"))
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "real_report", withExtension: "json", subdirectory: "Resources"))
         let data = try Data(contentsOf: url, options: [])
         let payload = try DiagnosticPayload.from(data: data)
 

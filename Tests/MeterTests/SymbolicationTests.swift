@@ -108,29 +108,35 @@ final class SymbolicationTests: XCTestCase {
 		let tree = CallStackTree(callStacks: [callStack], callStackPerThread: true)
 
 		let offsetCrashMetaData = CrashMetaData(deviceType: "",
-										  applicationBuildVersion: "",
-										  applicationVersion: "",
-										  osVersion: "macOS 13.0 (22A5358e)",
-										  platformArchitecture: "",
-										  regionFormat: "",
-										  virtualMemoryRegionInfo: nil,
-										  exceptionType: nil,
-										  terminationReason: nil,
-										  exceptionCode: nil,
-										  signal: nil)
+												applicationBuildVersion: "",
+												applicationVersion: "",
+												osVersion: "macOS 13.0 (22A5358e)",
+												platformArchitecture: "",
+												regionFormat: "",
+												isTestFlightApp: nil,
+												lowPowerModeEnabled: nil,
+												pid: nil,
+												virtualMemoryRegionInfo: nil,
+												exceptionType: nil,
+												terminationReason: nil,
+												exceptionCode: nil,
+												signal: nil)
 		let offsetCrashDiagnotic = CrashDiagnostic(metaData: offsetCrashMetaData, callStackTree: tree)
 
 		let absoluteCrashMetaData = CrashMetaData(deviceType: "",
-										  applicationBuildVersion: "",
-										  applicationVersion: "",
-										  osVersion: "macOS 12.1",
-										  platformArchitecture: "",
-										  regionFormat: "",
-										  virtualMemoryRegionInfo: nil,
-										  exceptionType: nil,
-										  terminationReason: nil,
-										  exceptionCode: nil,
-										  signal: nil)
+												  applicationBuildVersion: "",
+												  applicationVersion: "",
+												  osVersion: "macOS 12.1",
+												  platformArchitecture: "",
+												  regionFormat: "",
+												  isTestFlightApp: nil,
+												  lowPowerModeEnabled: nil,
+												  pid: nil,
+												  virtualMemoryRegionInfo: nil,
+												  exceptionType: nil,
+												  terminationReason: nil,
+												  exceptionCode: nil,
+												  signal: nil)
 		let absoluteCrashDiagnotic = CrashDiagnostic(metaData: absoluteCrashMetaData, callStackTree: tree)
 
 		var symbolicationTarget: SymbolicationTarget? = nil
@@ -151,7 +157,7 @@ final class SymbolicationTests: XCTestCase {
 	}
 
     func testSymbolicatesAllDiagnosticTypes() throws {
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json"))
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "xcode_simulated", withExtension: "json", subdirectory: "Resources"))
         let data = try Data(contentsOf: url, options: [])
         let payload = try XCTUnwrap(DiagnosticPayload.from(data: data))
 

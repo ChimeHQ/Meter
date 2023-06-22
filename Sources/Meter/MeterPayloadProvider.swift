@@ -1,13 +1,6 @@
-//
-//  MeterPayloadProvider.swift
-//  Meter
-//
-//  Created by Matt Massicotte on 2020-06-30.
-//
-
 import Foundation
 import os.log
-#if os(iOS) || os(macOS)
+#if canImport(MetricKit)
 import MetricKit
 #endif
 
@@ -23,15 +16,22 @@ public class MeterPayloadManager: NSObject {
     private let logger: OSLog
     public var deliverMetricKitDiagnostics = true
 
-    public static var metricKitDiagnosticsSupported: Bool {
-        #if os(iOS) || os(macOS)
-        if #available(iOS 14.0, macOS 12.0, *) {
-            return true
-        }
-        #endif
+	public static var metricKitDiagnosticsSupported: Bool {
+#if canImport(MetricKit)
+#if compiler(>=5.9)
+		if #available(iOS 14.0, macOS 12.0, xrOS 1.0, *) {
+			return true
+		}
+#else
+		if #available(iOS 14.0, macOS 12.0, *) {
+			return true
+		}
+#endif
 
-        return false
-    }
+#endif
+
+		return false
+	}
 
     public override init() {
         self.subscribers = []
@@ -43,11 +43,17 @@ public class MeterPayloadManager: NSObject {
         queue.name = "com.chimehq.Meter.PayloadProvider"
         queue.maxConcurrentOperationCount = 1
 
-        #if os(iOS) || os(macOS)
-        if #available(iOS 14.0, macOS 12.0, *) {
-            MXMetricManager.shared.add(self)
-        }
-        #endif
+#if canImport(MetricKit)
+#if compiler(>=5.9)
+		if #available(iOS 14.0, macOS 12.0, xrOS 1.0, *) {
+			MXMetricManager.shared.add(self)
+		}
+#else
+		if #available(iOS 14.0, macOS 12.0, *) {
+			MXMetricManager.shared.add(self)
+		}
+#endif
+#endif
     }
 
     public func add(_ subscriber: MeterPayloadSubscriber) {
@@ -94,15 +100,30 @@ extension MeterPayloadManager {
     }
 }
 
-#if os(iOS) || os(macOS)
+#if canImport(MetricKit)
 @available(iOS 13.0, macOS 12.0, *)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
 extension MeterPayloadManager: MXMetricManagerSubscriber {
-    #if os(iOS)
-    public func didReceive(_ payloads: [MXMetricPayload]) {
-    }
-    #endif
+#if compiler(>=5.9)
+#if os(iOS) || os(xrOS)
+	public func didReceive(_ payloads: [MXMetricPayload]) {
+	}
+#endif
+#else
+#if os(iOS)
+	public func didReceive(_ payloads: [MXMetricPayload]) {
+	}
+#endif
+#endif
 
-    @available(iOS 14.0, macOS 12.0, *)
+#if compiler(>=5.9)
+	@available(iOS 14.0, macOS 12.0, xrOS 1.0, *)
+#else
+	@available(iOS 14.0, macOS 12.0, *)
+#endif
+	@available(tvOS, unavailable)
+	@available(watchOS, unavailable)
     public func didReceive(_ payloads: [MXDiagnosticPayload]) {
         guard deliverMetricKitDiagnostics else { return }
 

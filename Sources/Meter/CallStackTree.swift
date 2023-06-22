@@ -1,12 +1,5 @@
-//
-//  CallStackTree.swift
-//  Meter
-//
-//  Created by Matt Massicotte on 2020-06-30.
-//
-
 import Foundation
-#if os(iOS) || os(macOS)
+#if canImport(MetricKit)
 import MetricKit
 #endif
 
@@ -129,14 +122,20 @@ public class CallStackTree: Codable {
         return try JSONDecoder().decode(CallStackTree.self, from: data)
     }
 
-    #if os(iOS) || os(macOS)
-    @available(iOS 14.0, macOS 12.0, *)
-    public static func from(callStackTree: MXCallStackTree) throws -> CallStackTree {
-        let data = callStackTree.jsonRepresentation()
+#if canImport(MetricKit)
+#if compiler(>=5.9)
+	@available(iOS 14.0, macOS 12.0, *)
+#else
+	@available(iOS 14.0, macOS 12.0, xrOS 1.0, *)
+#endif
+	@available(tvOS, unavailable)
+	@available(watchOS, unavailable)
+	public static func from(callStackTree: MXCallStackTree) throws -> CallStackTree {
+		let data = callStackTree.jsonRepresentation()
 
-        return try from(data: data)
-    }
-    #endif
+		return try from(data: data)
+	}
+#endif
 
     public init(callStacks: [CallStack], callStackPerThread: Bool) {
         self.callStacks = callStacks

@@ -1,8 +1,8 @@
 .DS_Store
 /.build
 /Packages
-/Carthage
-/*.xcodeproj
 xcuserdata/
 DerivedData/
+.swiftpm/configuration/registries.json
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
