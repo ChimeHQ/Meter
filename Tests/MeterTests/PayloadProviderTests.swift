@@ -45,7 +45,8 @@ final class PayloadProviderTests: XCTestCase {
                                      exceptionType: 5,
                                      terminationReason: "crash",
                                      exceptionCode: 5,
-                                     signal: 5)
+                                     signal: 5,
+									 exceptionReason: nil)
         let simulatedCrash = CrashDiagnostic(metaData: metaData,
                                              callStackTree: CallStackTree(callStacks: [], callStackPerThread: true))
 

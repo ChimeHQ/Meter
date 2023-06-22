@@ -133,6 +133,31 @@ public extension MXDiagnosticPayload {
 }
 #endif
 
+public final class ObjectiveCExceptionReason: Codable {
+	public let arguments: [String]
+	public let className: String
+	public let composedMessage: String
+	public let exceptionName: String
+	public let exceptionType: String
+	public let formatString: String
+
+	public init(
+		arguments: [String],
+		className: String,
+		composedMessage: String,
+		exceptionName: String,
+		exceptionType: String,
+		formatString: String
+	) {
+		self.arguments = arguments
+		self.className = className
+		self.composedMessage = composedMessage
+		self.exceptionName = exceptionName
+		self.exceptionType = exceptionType
+		self.formatString = formatString
+	}
+}
+
 public class CrashMetaData: Codable {
     public let deviceType: String
     public let applicationBuildVersion: String
@@ -148,6 +173,7 @@ public class CrashMetaData: Codable {
     public let terminationReason: String?
     public let exceptionCode: Int?
     public let signal: Int?
+	public let exceptionReason: ObjectiveCExceptionReason?
 
     enum CodingKeys: String, CodingKey {
         case virtualMemoryRegionInfo
@@ -164,7 +190,7 @@ public class CrashMetaData: Codable {
 		case isTestFlightApp
 		case lowPowerModeEnabled
 		case pid
-
+		case exceptionReason
     }
 
 	public init(
@@ -181,7 +207,8 @@ public class CrashMetaData: Codable {
 		exceptionType: Int?,
 		terminationReason: String?,
 		exceptionCode: Int?,
-		signal: Int?
+		signal: Int?,
+		exceptionReason: ObjectiveCExceptionReason?
 	) {
 		self.deviceType = deviceType
 		self.applicationBuildVersion = applicationBuildVersion
@@ -198,6 +225,7 @@ public class CrashMetaData: Codable {
 		self.terminationReason = terminationReason
 		self.exceptionCode = exceptionCode
 		self.signal = signal
+		self.exceptionReason = exceptionReason
 	}
 
     public init(diagnostic: CrashDiagnostic) {
@@ -215,6 +243,7 @@ public class CrashMetaData: Codable {
 		self.isTestFlightApp = diagnostic.metaData.isTestFlightApp
 		self.lowPowerModeEnabled = diagnostic.metaData.lowPowerModeEnabled
 		self.pid = diagnostic.metaData.pid
+		self.exceptionReason = diagnostic.metaData.exceptionReason
     }
 
     public func jsonRepresentation() -> Data {
@@ -272,6 +301,10 @@ public class CrashDiagnostic: Codable {
     public var signal: NSNumber? {
         return internalMetaData.signal.map({ NSNumber(value: $0) })
     }
+
+	public var exceptionReason: ObjectiveCExceptionReason? {
+		return internalMetaData.exceptionReason
+	}
 
     public var exceptionCode: NSNumber? {
         return internalMetaData.exceptionCode.map({ NSNumber(value: $0) })

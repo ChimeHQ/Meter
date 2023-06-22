@@ -120,7 +120,8 @@ final class SymbolicationTests: XCTestCase {
 												exceptionType: nil,
 												terminationReason: nil,
 												exceptionCode: nil,
-												signal: nil)
+												signal: nil,
+												exceptionReason: nil)
 		let offsetCrashDiagnotic = CrashDiagnostic(metaData: offsetCrashMetaData, callStackTree: tree)
 
 		let absoluteCrashMetaData = CrashMetaData(deviceType: "",
@@ -136,7 +137,8 @@ final class SymbolicationTests: XCTestCase {
 												  exceptionType: nil,
 												  terminationReason: nil,
 												  exceptionCode: nil,
-												  signal: nil)
+												  signal: nil,
+												  exceptionReason: nil)
 		let absoluteCrashDiagnotic = CrashDiagnostic(metaData: absoluteCrashMetaData, callStackTree: tree)
 
 		var symbolicationTarget: SymbolicationTarget? = nil
