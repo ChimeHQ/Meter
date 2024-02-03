@@ -19,7 +19,7 @@ public class MeterPayloadManager: NSObject {
 	public static var metricKitDiagnosticsSupported: Bool {
 #if canImport(MetricKit)
 #if compiler(>=5.9)
-		if #available(iOS 14.0, macOS 12.0, xrOS 1.0, *) {
+		if #available(iOS 14.0, macOS 12.0, visionOS 1.0, *) {
 			return true
 		}
 #else
@@ -45,7 +45,7 @@ public class MeterPayloadManager: NSObject {
 
 #if canImport(MetricKit)
 #if compiler(>=5.9)
-		if #available(iOS 14.0, macOS 12.0, xrOS 1.0, *) {
+		if #available(iOS 14.0, macOS 12.0, visionOS 1.0, *) {
 			MXMetricManager.shared.add(self)
 		}
 #else
@@ -106,7 +106,7 @@ extension MeterPayloadManager {
 @available(watchOS, unavailable)
 extension MeterPayloadManager: MXMetricManagerSubscriber {
 #if compiler(>=5.9)
-#if os(iOS) || os(xrOS)
+#if os(iOS) || os(visionOS)
 	public func didReceive(_ payloads: [MXMetricPayload]) {
 	}
 #endif
@@ -118,7 +118,7 @@ extension MeterPayloadManager: MXMetricManagerSubscriber {
 #endif
 
 #if compiler(>=5.9)
-	@available(iOS 14.0, macOS 12.0, xrOS 1.0, *)
+	@available(iOS 14.0, macOS 12.0, visionOS 1.0, *)
 #else
 	@available(iOS 14.0, macOS 12.0, *)
 #endif
