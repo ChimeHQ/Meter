@@ -101,16 +101,20 @@ struct DynamicLibraryInfo {
 }
 
 extension DlfcnSymbolicator: Symbolicator {
-    public func symbolicate(address: Int, in target: SymbolicationTarget) -> [SymbolInfo] {
+    public func symbolicate(address: UInt64, in target: SymbolicationTarget) -> [SymbolInfo] {
         guard let loadedImage = imageMap[target.uuid] else {
             return []
         }
 
 		let loadAddress = Int(bitPattern: loadedImage.header)
-        let relativeAddress = address - target.loadAddress
-        let processAddress = loadAddress + relativeAddress
+        let relativeAddress = address - UInt64(target.loadAddress)
+        let processAddress = UInt64(loadAddress) + relativeAddress
 
-        guard let info = DynamicLibraryInfo(address: processAddress) else {
+		if processAddress > Int.max {
+			return []
+		}
+
+        guard let info = DynamicLibraryInfo(address: Int(processAddress)) else {
             return []
         }
 

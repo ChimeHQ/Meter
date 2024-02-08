@@ -58,7 +58,7 @@ public struct SymbolicationTarget: Hashable {
 }
 
 public protocol Symbolicator {
-    func symbolicate(address: Int, in target: SymbolicationTarget) -> [SymbolInfo]
+    func symbolicate(address: UInt64, in target: SymbolicationTarget) -> [SymbolInfo]
 }
 
 public extension Frame {
@@ -74,9 +74,13 @@ public extension Symbolicator {
         let subframes = frame.subFrames ?? []
         let symSubframes = subframes.map({ symbolicate(frame: $0, withOffsetAsLoadAddress: withOffsetAsLoadAddress) })
 
+		if frame.address > Int.max {
+			return Frame(frame: frame, symbolInfo: [], subFrames: symSubframes)
+		}
+
 		let addr = Int(frame.address)
         let target = frame.symbolicationTarget(withOffsetAsLoadAddress: withOffsetAsLoadAddress)
-        let info = target.map({ symbolicate(address: addr, in: $0) }) ?? []
+        let info = target.map({ symbolicate(address: UInt64(addr), in: $0) }) ?? []
 
         return Frame(frame: frame, symbolInfo: info, subFrames: symSubframes)
     }

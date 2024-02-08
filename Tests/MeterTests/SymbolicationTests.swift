@@ -3,7 +3,7 @@ import XCTest
 import BinaryImage
 
 struct MockSymbolicator {
-	typealias SymbolicationHandler = (Int, SymbolicationTarget) -> [SymbolInfo]
+	typealias SymbolicationHandler = (UInt64, SymbolicationTarget) -> [SymbolInfo]
 
 	var symbolicationHandler: SymbolicationHandler
 
@@ -13,12 +13,14 @@ struct MockSymbolicator {
 }
 
 extension MockSymbolicator: Symbolicator {
-    func symbolicate(address: Int, in target: SymbolicationTarget) -> [SymbolInfo] {
+    func symbolicate(address: UInt64, in target: SymbolicationTarget) -> [SymbolInfo] {
         return symbolicationHandler(address, target)
     }
 }
 
 final class SymbolicationTests: XCTestCase {
+	lazy var processImages = BinaryImage.imageMap
+
     // guard against 64bit addresses
     #if !os(watchOS)
     func testDlfcnSymbolicator() throws {
@@ -40,7 +42,36 @@ final class SymbolicationTests: XCTestCase {
         XCTAssertNil(infoArray[0].lineNumber)
         XCTAssertNil(infoArray[0].file)
     }
-    #endif
+	#endif
+
+	func testDlfcnSymbolicatorWithAddressOutsideIntRange() throws {
+		let randomImage = try XCTUnwrap(processImages.first)
+
+		let symbolicator = DlfcnSymbolicator()
+
+		// the load address and path are both bogus and will not match the UUID
+		let target = try XCTUnwrap(
+			SymbolicationTarget(
+				uuid: randomImage.key,
+				loadAddress: 0x19d0c4000,
+				path: "/usr/lib/system/libsystem_kernel.dylib"
+			)
+		)
+
+		// this will fail, but it should not crash
+		let infoArray = symbolicator.symbolicate(address: UInt64(Int.max) + 1, in: target)
+
+		XCTAssertEqual(infoArray.count, 0)
+	}
+
+	func testDlfcnSymbolicatorWithFrameAddressOutsideIntRange() throws {
+		let symbolicator = DlfcnSymbolicator()
+
+		// this will fail, but it should not crash
+		let frame = Frame(address: UInt64(Int.max) + 1, subFrames: nil)
+
+		_ = symbolicator.symbolicate(frame: frame, withOffsetAsLoadAddress: true)
+	}
 
     func testTargetCalculation() throws {
         let uuid = UUID()
@@ -78,7 +109,7 @@ final class SymbolicationTests: XCTestCase {
         let symbolInfoB = SymbolInfo(symbol: "symbolB", offset: 10)
         let symbolInfoA = SymbolInfo(symbol: "symbolA", offset: 10)
 
-		let mockResults = [Int(frameB.address): [symbolInfoB], Int(frameA.address): [symbolInfoA]]
+		let mockResults = [frameB.address: [symbolInfoB], frameA.address: [symbolInfoA]]
 
 		let mockSymbolicator = MockSymbolicator { addr, _ in
 			return mockResults[addr]!
@@ -165,7 +196,7 @@ final class SymbolicationTests: XCTestCase {
 
         let symbolInfo = SymbolInfo(symbol: "symSymbol", offset: 10)
 
-		let mockResults = [74565: [symbolInfo]]
+		let mockResults = [UInt64(74565): [symbolInfo]]
 
 		let mockSymbolicator = MockSymbolicator { addr, _ in
 			return mockResults[addr]!
