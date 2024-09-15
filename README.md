@@ -47,29 +47,6 @@ As of iOS 17, macOS 14, visionOS 1.0, MetricKit does capture uncaught [NSExcepti
 
 How you actually get access to the `NSException` is not defined by Meter. But, if you have one, the `CrashDiagnostic` type also includes an `exceptionInfo` property that can accept one of these for easy encoding.
 
-## MXMetricManager and Diagnostics Polyfill
-
-MetricKit's crash reporting facilities require iOS 14/macOS 12.0, and isn't supported at all for tvOS or watchOS. You may want to start moving towards using it as a standard interface between your app and whatever system consumes the data. Meter offers an API that's very similar to MetricKit's `MXMetricManager` to help do just that.
-
-```swift
-// adding a subscriber
-MeterPayloadManager.shared.add(obj)
-
-extension MyObject: MeterPayloadSubscriber {
-    func didReceive(_ payloads: [DiagnosticPayloadProtocol]) {
-        // this will be called for both simulated payloads *and* MeterKit payloads on OSes it supports
-        print("received payloads \(payloads)")
-    }
-}
-
-// posting diagnostics
-MeterPayloadManager.shared.deliver(payloads)
-```
-
-This makes it easier to support the full capabilities of MetricKit when available, and gracefully degrade when they aren't. It can be nice to have a uniform interface to whatever backend system you are using to consume the reports. And, as you move towards a supported minimum, and as (hopefully) Apple starts supporting MetricKit on all platforms, it will be easier to pull out Meter altogether.
-
-Backwards compatibility is still up to you, though. One solution is [ImpactMeterAdapter](https://github.com/ChimeHQ/ImpactMeterAdapter), which uses [Impact](https://github.com/ChimeHQ/Impact) to collect crash data for OSes that don't support `MXCrashDiagnostic`.
-
 ## On-Device Symbolication
 
 The stack traces provided by MetricKit, like other types of crash logs, are not symbolicated. There are a bunch of different ways to tackle this problem, but one very convenient option is just to do it as a post-processing step on the device where the crash occurred. This does come, however, with one major drawback. It only works when you still have access to the same binaries. OS updates will almost certainly change all the OS binaries. The same is true for an app update, though in that case, an off-line symbolication step using a dSYM is still doable.
