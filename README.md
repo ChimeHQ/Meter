@@ -1,7 +1,11 @@
+<div align="center">
+
 [![Build Status][build status badge]][build status]
-[![License][license badge]][license]
 [![Platforms][platforms badge]][platforms]
 [![Documentation][documentation badge]][documentation]
+[![Matrix][matrix badge]][matrix]
+
+</div>
 
 # Meter
 
@@ -87,21 +91,20 @@ This is a relatively inexpensive symbolication pass, and is a first effort. Furt
 
 ## Contributing and Collaboration
 
+I would love to hear from you! Issues or pull requests work great. Both a [Matrix space][matrix] and [Discord][discord] are available for live help, but I have a strong bias towards answering in the form of documentation. You can also find me on [mastodon](https://mastodon.social/@mattiem).
+
 I prefer collaboration, and would love to find ways to work together if you have a similar project.
 
 I prefer indentation with tabs for improved accessibility. But, I'd rather you use the system you want and make a PR than hesitate because of whitespace.
 
-## Suggestions or Feedback
-
-We'd love to hear from you! Get in touch via an issue or a pull request.
-
-Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+By participating in this project you agree to abide by the [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
 
 [build status]: https://github.com/ChimeHQ/Meter/actions
 [build status badge]: https://github.com/ChimeHQ/Meter/workflows/CI/badge.svg
-[license]: https://opensource.org/licenses/BSD-3-Clause
-[license badge]: https://img.shields.io/github/license/ChimeHQ/Meter
 [platforms]: https://swiftpackageindex.com/ChimeHQ/Meter
 [platforms badge]: https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FChimeHQ%2FMeter%2Fbadge%3Ftype%3Dplatforms
 [documentation]: https://swiftpackageindex.com/ChimeHQ/Meter/main/documentation
 [documentation badge]: https://img.shields.io/badge/Documentation-DocC-blue
+[matrix]: https://matrix.to/#/%23chimehq%3Amatrix.org
+[matrix badge]: https://img.shields.io/matrix/chimehq%3Amatrix.org?label=Matrix
+[discord]: https://discord.gg/esFpX6sErJ
